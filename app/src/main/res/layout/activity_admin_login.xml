@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:id="@+id/housingLayout"
+    android:layout_height="match_parent"
+    tools:context=".AdminLoginActivity">
+
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+        android:id="@+id/adminPanelLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:umanoPanelHeight="0dp"
+        android:gravity="bottom"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="16dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="44dp"
+                android:text="Login"
+                android:textColor="@android:color/white"
+                android:textSize="40sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.051"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Login to continue"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="@+id/textView"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/textView"
+                app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+
+                android:textColorHint="@android:color/white"
+                app:layout_constraintBottom_toTopOf="@+id/fabLoginAdmin"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.468"
+                tools:layout_editor_absoluteX="16dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/emailETadminLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Email"
+                    android:inputType="textEmailAddress" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:textColorHint="@android:color/white"
+                app:layout_constraintBottom_toTopOf="@+id/fabLoginAdmin"
+                app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/textInputLayout"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
+                app:layout_constraintVertical_bias="0.147">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/passwordETAdminLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Password"
+                    android:inputType="textPassword" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:textColorHint="@android:color/white"
+                app:layout_constraintBottom_toTopOf="@+id/fabLoginAdmin"
+                app:layout_constraintEnd_toEndOf="@+id/textInputLayout2"
+                app:layout_constraintHorizontal_bias="0.526"
+                app:layout_constraintStart_toStartOf="@+id/textInputLayout2"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout2"
+                app:layout_constraintVertical_bias="0.241">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/specTokenAdminLoginET"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Special token"
+                    android:inputType="textPassword" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabLoginAdmin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_arrow"
+                app:backgroundTint="@color/primary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.8" />
+
+            <ProgressBar
+                android:id="@+id/adminLoginPB"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:visibility="gone"
+                android:maxWidth="1dp"
+                android:progressTint="@android:color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.822" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="96dp"
+                android:text="Not an admin yet? "
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/adminLoginPB"
+                app:layout_constraintVertical_bias="0.355" />
+
+            <TextView
+                android:id="@+id/adminsignupText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign up"
+                android:textColor="@color/primary"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/textView2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.074"
+                app:layout_constraintStart_toEndOf="@+id/textView2"
+                app:layout_constraintTop_toTopOf="@+id/textView2"
+                app:layout_constraintVertical_bias="0.0" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- This is the panel -->
+        <include layout="@layout/admin_sign_up_screen" />
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
