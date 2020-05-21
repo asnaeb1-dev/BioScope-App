@@ -15,7 +15,7 @@
         <activity
             android:name=".MainUserActivity"
             android:label="@string/title_activity_main_user"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".UploaderActivity" />
         <activity android:name=".AdminLoginActivity" />
         <activity android:name=".UserLoginActivity" />

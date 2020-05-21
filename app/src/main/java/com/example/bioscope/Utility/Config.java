@@ -6,9 +6,19 @@ import java.util.Random;
 public class Config {
     private static String BASE_URL = "https://raha-bioscope-app.herokuapp.com";
     private static String IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
+    private static String TMDBAPIKEY = "17d99bf38e7ffbebabfc4d9713b679a8";
+    private static String TMDB_BASE_URL = "https://api.themoviedb.org";
+
+    public static String getTMDBAPIKEY() {
+        return TMDBAPIKEY;
+    }
 
     public  String getImageBaseUrl() {
         return IMAGE_BASE_URL;
+    }
+
+    public static String getTmdbBaseUrl() {
+        return TMDB_BASE_URL;
     }
 
     public static String getBaseUrl() {

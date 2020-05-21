@@ -9,8 +9,6 @@ public class UploaderMovieObj {
     private String posterPath;
     private String language;
 
-
-
     public UploaderMovieObj(String _id, String title, String url, String createdAt, String posterPath, String language) {
         this._id = _id;
         this.title = title;
