@@ -74,11 +74,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         movieID = getIntent().getStringExtra("movie_id");
         if(movieID!=null){
-            if(Integer.parseInt(cinemaReleaseDate.getText().toString().substring(0, 4)) <= 2016){
                 getMovieInformation(movieID);
-            }else{
-                Toast.makeText(this, "No recommendations available", Toast.LENGTH_SHORT).show();
-            }
         }else{
             finish();
         }
@@ -94,10 +90,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(url!=null){
                     Intent intent = new Intent(getApplicationContext(), VideoPlayerActivity.class);
-                    intent.putExtra("video_url",url);
+                    intent.putExtra("videourl",url);
                     startActivity(intent);
                 }else{
-                    Toast.makeText(MovieDetailsActivity.this, "Please wait...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MovieDetailsActivity.this, "Video unavailable", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -138,6 +134,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     assert response.body()!=null;
                     MoviePOJO object = response.body();
                     populateLayout(object.getTitle(), object.getDescription(), object.getYear(), object.getPosterPath(), object.getBackdrop(), object.getUrl(), object.getLanguage());
+                    url = response.body().getUrl();
                 }
             }
 

@@ -371,6 +371,7 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+
         finish();
     }
 }
