@@ -2,6 +2,7 @@ package com.example.bioscope.API;
 
 import com.example.bioscope.POJO.LogoutUser;
 import com.example.bioscope.POJO.MoviePOJO;
+import com.example.bioscope.POJO.RecommendationPOJO;
 import com.example.bioscope.POJO.UserSignUp;
 import com.example.bioscope.Utility.UploaderMovieObj;
 
@@ -33,4 +34,10 @@ public interface UserRoutes {
 
     @GET("/movie/id")
     Call<MoviePOJO> getCinema(@Query("id") String rating, @Header("Authorization") String token);
+
+    // /movie/recommendations?title=pacific rim
+    @GET("/movie/recommendations")
+    Call<List<RecommendationPOJO>> getRecommendations(@Query("title") String title, @Header("Authorization") String token);
+
+
 }
