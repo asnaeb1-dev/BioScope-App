@@ -213,11 +213,13 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
                 if(response.isSuccessful()){
                     assert response.body()!=null;
                     List<MoviePOJO> list = response.body();
+                    movieList.clear();
                     for(MoviePOJO object : list){
                         movieList.add(new MainMovieObject(object.getId(), object.getTitle(), object.getDescription(),
                                 object.getUrl(), object.getPosterPath(), object.getBackdrop(), object.getRating(),object.getLanguage(),
                                 object.getCreatedAt(), object.getUploadedBy(), object.getYear()));
                     }
+                    carousalVP.removeAllViews();
                     carousalVP.setAdapter(new ViewPagerAdapter(MainUserActivity.this, movieList));
                 }
             }
@@ -265,7 +267,7 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
 
     private void populateHorizontalLayout() {
         horizontalScrollView.removeAllViews();
-        for(MainMovieObject movie : movieList){
+        for(final MainMovieObject movie : movieList){
             TextView textView = new TextView(this);
             if(movie.getTitle().length()>15){
                 textView.setText(movie.getTitle().substring(0,14) + "...");
@@ -284,6 +286,15 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
             linearLayout.setOrientation(LinearLayout.VERTICAL);
             linearLayout.addView(imageView);
             linearLayout.addView(textView);
+
+            linearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), MovieDetailsActivity.class);
+                    intent.putExtra("movie_id", movie.get_id());
+                    startActivity(intent);
+                }
+            });
 
             horizontalScrollView.addView(linearLayout);
         }

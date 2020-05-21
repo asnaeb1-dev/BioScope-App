@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@drawable/background_ll"
+    android:layout_height="match_parent">
+
+   <LinearLayout
+       android:orientation="vertical"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+
+       <TextView
+           android:id="@+id/cinemaTitle"
+           android:layout_width="match_parent"
+           android:padding="5dp"
+           android:layout_height="wrap_content"
+           android:textSize="25sp"
+           android:layout_margin="10dp"
+           android:gravity="center"/>
+
+       <ScrollView
+           android:layout_width="match_parent"
+           android:layout_height="match_parent">
+           <LinearLayout
+               android:orientation="vertical"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content">
+
+               <TextView
+                   android:id="@+id/cinemaLanguage"
+                   android:layout_width="match_parent"
+                   android:textSize="16sp"
+                   android:layout_margin="10dp"
+                   android:padding="5dp"
+                   android:layout_height="wrap_content"/>
+
+               <TextView
+                   android:id="@+id/cinemaRelease"
+                   android:layout_margin="10dp"
+                   android:textSize="16sp"
+                   android:padding="5dp"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"/>
+
+               <TextView
+                   android:id="@+id/cinemaOverview"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_margin="10dp"
+                   android:padding="5dp"
+                   android:textAlignment="viewStart"
+                   android:textSize="16sp" />
+
+               <TextView
+                   android:layout_margin="10dp"
+                   android:textSize="16sp"
+                   android:padding="5dp"
+                   android:text="Recommended"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"/>
+
+                <HorizontalScrollView
+                    android:layout_margin="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp">
+                    <LinearLayout
+                        android:id="@+id/recommendationHousingLL"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                    </LinearLayout>
+                </HorizontalScrollView>
+           </LinearLayout>
+       </ScrollView>
+   </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

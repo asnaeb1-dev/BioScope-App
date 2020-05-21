@@ -17,4 +17,5 @@
     <string name="title_activity_main2">Main2Activity</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
+    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer malesuada quam a turpis ultrices, vitae lacinia ipsum venenatis. Aliquam rutrum vestibulum mi. Curabitur in bibendum libero. Duis fermentum, mauris a tempor interdum, massa tortor fringilla justo, ac cursus leo ligula ut quam. Morbi et consequat nulla. Suspendisse potenti. Morbi risus arcu, placerat sit amet turpis quis, imperdiet euismod risus. Donec tempor sed nunc et tincidunt. Donec elementum, odio id placerat imperdiet, quam nulla rutrum risus, sed lobortis orci orci vitae nunc.</string>
 </resources>

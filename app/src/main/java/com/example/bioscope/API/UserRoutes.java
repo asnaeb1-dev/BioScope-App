@@ -30,4 +30,7 @@ public interface UserRoutes {
 
     @GET("/movie/ratings")
     Call<List<MoviePOJO>> getMoviesByRating(@Query("r") int rating,@Header("Authorization") String token);
+
+    @GET("/movie/id")
+    Call<MoviePOJO> getCinema(@Query("id") String rating, @Header("Authorization") String token);
 }
