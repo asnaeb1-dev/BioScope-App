@@ -3,6 +3,8 @@ package com.example.bioscope;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -10,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,14 +27,25 @@ import com.bumptech.glide.request.transition.Transition;
 import com.example.bioscope.API.TMDBRoutes;
 import com.example.bioscope.API.UserRoutes;
 import com.example.bioscope.POJO.AuxillaryResponse;
+import com.example.bioscope.POJO.CinemaPOJO;
 import com.example.bioscope.POJO.MoviePOJO;
 import com.example.bioscope.POJO.RecommendationPOJO;
+import com.example.bioscope.POJO.Subclass.Actor;
+import com.example.bioscope.POJO.Subclass.Backdrop;
+import com.example.bioscope.POJO.Subclass.GenresArray;
+import com.example.bioscope.POJO.Subclass.Poster;
+import com.example.bioscope.POJO.Subclass.Recommendation;
+import com.example.bioscope.POJO.Subclass.Video;
 import com.example.bioscope.Utility.Config;
+import com.example.bioscope.Utility.MainMovieObject;
+import com.example.bioscope.Utility.ViewPagerAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.blurry.Blurry;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,13 +57,14 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
     private SlidingUpPanelLayout slidingUpPanelLayout;
     private TextView cinemaTitle, cinemaOverview, cinemalanguage, cinemaReleaseDate;
-    private LinearLayout linearLayout;
-    private ImageView cinemaPoster, cinemaBackdrop;
-    private FloatingActionButton downloadFAB, playFAB;
+    private LinearLayout actorLL, recommedationLL;
+    private ImageView cinemaPoster, backButton;
 
     private String movieID;
     private String url;
     private boolean isCalled = false;
+
+    private CinemaPOJO cinemaPOJO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,178 +72,139 @@ public class MovieDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_movie_details);
 
         slidingUpPanelLayout = findViewById(R.id.movieDetailsSlider);
-        cinemaTitle = findViewById(R.id.cinemaTitle);
-        cinemaOverview = findViewById(R.id.cinemaOverview);
         cinemaPoster = findViewById(R.id.cinemaPoster);
-        cinemaBackdrop = findViewById(R.id.cinemaBackdrop);
-        cinemalanguage = findViewById(R.id.cinemaLanguage);
-        cinemaReleaseDate = findViewById(R.id.cinemaRelease);
-        linearLayout = findViewById(R.id.recommendationHousingLL);
-        downloadFAB = findViewById(R.id.downloadFAB);
-        playFAB = findViewById(R.id.watchNowFAB);
+        backButton = findViewById(R.id.backButton);
+        cinemalanguage = findViewById(R.id.languageTV);
+        cinemaTitle = findViewById(R.id.cinemaTitle);
+        cinemaReleaseDate = findViewById(R.id.releaseTextView);
+        cinemaOverview = findViewById(R.id.cinemaOverView);
+        actorLL = findViewById(R.id.actorListLL);
+        recommedationLL = findViewById(R.id.recommedationLL);
+        setPanelHeight();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        movieID = getIntent().getStringExtra("movie_id");
+        //movieID = getIntent().getStringExtra("movie_id");
+        movieID = "5ec92453d9d2f6001700fb71";
         if(movieID!=null){
-                getMovieInformation(movieID);
+            if(!isCalled){
+                getMovieDetails();
+                isCalled = true;
+            }
         }else{
+            Toast.makeText(this, "Please try again...", Toast.LENGTH_SHORT).show();
             finish();
         }
-        downloadFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        playFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(url!=null){
-                    Intent intent = new Intent(getApplicationContext(), VideoPlayerActivity.class);
-                    intent.putExtra("videourl",url);
-                    startActivity(intent);
-                }else{
-                    Toast.makeText(MovieDetailsActivity.this, "Video unavailable", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        slidingUpPanelLayout.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
-            @Override
-            public void onPanelSlide(View panel, float slideOffset) {
-                float presentVal = 0f;
-                if(slideOffset>presentVal)
-                {
-                    //panel slide state is expanded
-                    if(cinemaTitle!=null && !isCalled) {
-                        getRecommendation(cinemaTitle.getText().toString());
-                        isCalled = true;
-                    }
-                }
-            }
-
-            @Override
-            public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
-
-            }
-        });
     }
 
-    private void getMovieInformation(String movie_id){
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Config.getBaseUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+    private void setPanelHeight(){
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        slidingUpPanelLayout.setPanelHeight(displayMetrics.heightPixels/2 - 100);
 
-        UserRoutes user = retrofit.create(UserRoutes.class);
-        Call<MoviePOJO> call = user.getCinema(movie_id, getSharedPreferences("MY_PREFS", MODE_PRIVATE).getString("USER_TOKEN", null));
-        call.enqueue(new Callback<MoviePOJO>() {
+    }
+
+    private Retrofit initializeRetrofit(String url){
+        return new Retrofit.Builder().baseUrl(url).addConverterFactory(GsonConverterFactory.create()).build();
+    }
+
+    private void getMovieDetails(){
+        UserRoutes user = initializeRetrofit(Config.getBaseUrl()).create(UserRoutes.class);
+        Call<CinemaPOJO> call = user.getCinema(movieID, getSharedPreferences("MY_PREFS", MODE_PRIVATE).getString("USER_TOKEN", null));
+        call.enqueue(new Callback<CinemaPOJO>() {
             @Override
-            public void onResponse(Call<MoviePOJO> call, Response<MoviePOJO> response) {
+            public void onResponse(Call<CinemaPOJO> call, Response<CinemaPOJO> response) {
                 if(response.isSuccessful()){
                     assert response.body()!=null;
-                    MoviePOJO object = response.body();
-                    populateLayout(object.getTitle(), object.getDescription(), object.getYear(), object.getPosterPath(), object.getBackdrop(), object.getUrl(), object.getLanguage());
-                    url = response.body().getUrl();
+                    cinemaPOJO = response.body();
+                    populateLayout();
                 }
             }
 
             @Override
-            public void onFailure(Call<MoviePOJO> call, Throwable t) {
+            public void onFailure(Call<CinemaPOJO> call, Throwable t) {
                 Log.e("ERROR", t.getMessage());
             }
         });
     }
 
-    private void getRecommendation(String title){
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(Config.getBaseUrl()).addConverterFactory(GsonConverterFactory.create()).build();
-
-        UserRoutes user = retrofit.create(UserRoutes.class);
-        Call<List<RecommendationPOJO>> call = user.getRecommendations(title, getSharedPreferences("MY_PREFS", MODE_PRIVATE).getString("USER_TOKEN", null));
-        call.enqueue(new Callback<List<RecommendationPOJO>>() {
-            @Override
-            public void onResponse(Call<List<RecommendationPOJO>> call, Response<List<RecommendationPOJO>> response) {
-                if(response.isSuccessful()){
-                    assert response.body()!=null;
-                    List<RecommendationPOJO> recommendationPOJOList = response.body();
-                    for(RecommendationPOJO recommended : recommendationPOJOList){
-                        getPosters(recommended.getName());
-                    }
-                }
+    private void populateLayout() {
+        //set main poster
+        for(Poster poster : cinemaPOJO.getPosters()){
+            if(poster.getHeight() == 3000 && poster.getWidth() == 2000){
+                Glide.with(this).load(new Config().getImageBaseUrl() + poster.getPosterPath()).into(cinemaPoster);
+                break;
             }
+        }
+        actorLL.removeAllViews();
+        recommedationLL.removeAllViews();
+        for(Actor actor : cinemaPOJO.getActors()){
+            if(actor.getActorPoster()!=null){
+                final CircleImageView circleImageView = new CircleImageView(this);
+                circleImageView.setLayoutParams(new LinearLayout.LayoutParams(200, ViewGroup.LayoutParams.WRAP_CONTENT));
+                Glide.with(this)
+                        .asBitmap()
+                        .load(new Config().getImageBaseUrl() + actor.getActorPoster())
+                        .into(new CustomTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                circleImageView.setImageBitmap(Bitmap.createScaledBitmap(resource, 150, 150, true));
+                            }
 
-            @Override
-            public void onFailure(Call<List<RecommendationPOJO>> call, Throwable t) {
-                Log.e("ERROR", t.getMessage());
+                            @Override
+                            public void onLoadCleared(@Nullable Drawable placeholder) {
+                            }
+                        });
+                actorLL.addView(circleImageView);
             }
-        });
-
-    }
-
-    private void getPosters(String title){
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Config.getOmdbBaseUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        TMDBRoutes user = retrofit.create(TMDBRoutes.class);
-        Call<AuxillaryResponse> call = user.getPosters(title, new Config().getOmdbApiKey());
-        call.enqueue(new Callback<AuxillaryResponse>() {
-            @Override
-            public void onResponse(Call<AuxillaryResponse> call, Response<AuxillaryResponse> response) {
-                if(response.isSuccessful()){
-                    assert response.body()!=null;
-                    Log.i("POSTERS", response.body().getPoster());
-                    ImageView imageView = new ImageView(MovieDetailsActivity.this);
-                    imageView.setLayoutParams(new LinearLayout.LayoutParams(250, ViewGroup.LayoutParams.MATCH_PARENT));
-                    imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-                    imageView.setPadding(2,4, 2, 4);
-                    Glide.with(MovieDetailsActivity.this).load(response.body().getPoster()).into(imageView);
-                    linearLayout.addView(imageView);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<AuxillaryResponse> call, Throwable t) {
-                Log.e("ERROR", t.getMessage());
-            }
-        });
-    }
-
-    @SuppressLint("SetTextI18n")
-    private void populateLayout(String title, String overview, String year, String posterPath, String backdropPath, String url, String language){
-        cinemaTitle.setText(title);
-        cinemaOverview.setText(overview);
-        cinemaReleaseDate.setText("Release: "+year);
-        if(language.equals("en")){
+        }
+        //set title
+        cinemaTitle.setText(cinemaPOJO.getTitle());
+        cinemaOverview.setText(cinemaPOJO.getDescription());
+        cinemaReleaseDate.setText("Release: "+ cinemaPOJO.getYear());
+        if( cinemaPOJO.getLanguage().equals("en")){
             cinemalanguage.setText("Language: English");
         }
 
-        Glide.with(this).load(new Config().getImageBaseUrl() + posterPath).into(cinemaPoster);
-        Glide.with(this)
-                .asBitmap()
-                .load(new Config().getImageBaseUrl() + backdropPath)
-                .into(new CustomTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        Blurry.with(MovieDetailsActivity.this).from(resource).into(cinemaBackdrop);
+        /*
+        RoundedBitmapDrawable dr =
+    RoundedBitmapDrawableFactory.create(res, src);
+dr.setCornerRadius(Math.max(src.getWidth(), src.getHeight()) / 2.0f);
+imageView.setImageDrawable(dr);
+         */
+        for(Recommendation recommendation: cinemaPOJO.getRecommendation()){
+            final ImageView imageView = new ImageView(this);
+            imageView.setPadding(10, 5, 10, 5);
+            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+            Glide.with(this)
+                    .asBitmap()
+                    .load(recommendation.getMoviePosterData())
+                    .into(new CustomTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                            RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(getResources(),resource);
+                            dr.setCornerRadius(10);
+                            imageView.setImageDrawable(dr);
+                        }
 
-                    }
-
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
-                    }
-                });
+                        @Override
+                        public void onLoadCleared(@Nullable Drawable placeholder) {
+                        }
+                    });
+            recommedationLL.addView(imageView);
+        }
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        finish();
+    }
+
+    public void goBackFunction(View view) {
         finish();
     }
 }

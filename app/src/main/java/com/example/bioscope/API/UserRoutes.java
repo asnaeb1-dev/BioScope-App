@@ -1,10 +1,10 @@
 package com.example.bioscope.API;
 
+import com.example.bioscope.POJO.CinemaPOJO;
 import com.example.bioscope.POJO.LogoutUser;
 import com.example.bioscope.POJO.MoviePOJO;
 import com.example.bioscope.POJO.RecommendationPOJO;
 import com.example.bioscope.POJO.UserSignUp;
-import com.example.bioscope.Utility.UploaderMovieObj;
 
 import java.util.List;
 
@@ -33,11 +33,10 @@ public interface UserRoutes {
     Call<List<MoviePOJO>> getMoviesByRating(@Query("r") int rating,@Header("Authorization") String token);
 
     @GET("/movie/id")
-    Call<MoviePOJO> getCinema(@Query("id") String rating, @Header("Authorization") String token);
+    Call<CinemaPOJO> getCinema(@Query("id") String id, @Header("Authorization") String token);
 
     // /movie/recommendations?title=pacific rim
     @GET("/movie/recommendations")
     Call<List<RecommendationPOJO>> getRecommendations(@Query("title") String title, @Header("Authorization") String token);
-
 
 }

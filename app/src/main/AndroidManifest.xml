@@ -13,7 +13,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".VideoPlayerActivity"></activity>
-        <activity android:name=".MovieDetailsActivity" />
+        <activity android:name=".MovieDetailsActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".MainUserActivity"
             android:label="@string/title_activity_main_user"
@@ -22,11 +28,7 @@
         <activity android:name=".AdminLoginActivity" />
         <activity android:name=".UserLoginActivity" />
         <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <meta-data

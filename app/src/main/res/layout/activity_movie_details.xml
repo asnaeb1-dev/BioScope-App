@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@android:color/transparent"
     android:layout_height="match_parent"
     tools:context=".MovieDetailsActivity">
-    <ImageView
-        android:id="@+id/cinemaBackdrop"
-        android:layout_width="match_parent"
-        android:alpha="0.5"
-        android:scaleType="centerCrop"
-        android:layout_height="match_parent">
 
-    </ImageView>
+
 
     <com.sothree.slidinguppanel.SlidingUpPanelLayout
         android:id="@+id/movieDetailsSlider"
@@ -24,67 +20,39 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:umanoPanelHeight="300dp"
-        app:umanoShadowHeight="0dp">
+        app:umanoShadowHeight="10dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
+            android:background="@android:color/transparent"
             android:layout_height="match_parent">
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/downloadFAB"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_file_download_black_24dp"
-                app:backgroundTint="@color/primary"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/cinemaPoster"
-                app:layout_constraintTop_toBottomOf="@+id/cinemaPoster"
-                app:layout_constraintVertical_bias="0.121" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/watchNowFAB"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_play_arrow_black_24dp"
-                app:backgroundTint="@color/primary"
-                app:layout_constraintBottom_toBottomOf="@+id/downloadFAB"
-                app:layout_constraintEnd_toEndOf="@+id/cinemaPoster"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/downloadFAB"
-                app:layout_constraintTop_toBottomOf="@+id/cinemaPoster"
-                app:layout_constraintVertical_bias="1.0" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="Download"
-                app:layout_constraintEnd_toEndOf="@+id/downloadFAB"
-                app:layout_constraintStart_toStartOf="@+id/downloadFAB"
-                app:layout_constraintTop_toBottomOf="@+id/downloadFAB" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="Watch"
-                app:layout_constraintEnd_toEndOf="@+id/watchNowFAB"
-                app:layout_constraintHorizontal_bias="0.562"
-                app:layout_constraintStart_toStartOf="@+id/watchNowFAB"
-                app:layout_constraintTop_toBottomOf="@+id/watchNowFAB" />
 
             <ImageView
                 android:id="@+id/cinemaPoster"
-                android:layout_width="220dp"
-                android:layout_height="300dp"
-                android:scaleType="fitXY"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0.8"
+                android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.09" />
+                app:layout_constraintVertical_bias="0.0" />
+
+            <ImageView
+                android:id="@+id/backButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="goBackFunction"
+                android:rotation="180"
+                android:src="@drawable/ic_arrow"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.136"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/cinemaPoster"
+                app:layout_constraintVertical_bias="0.091" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
