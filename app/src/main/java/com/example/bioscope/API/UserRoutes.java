@@ -27,10 +27,10 @@ public interface UserRoutes {
     Call<LogoutUser> logoutUser(@Header("Authorization") String token);
 
     @GET("/movie/all")
-    Call<List<MoviePOJO>> getMovies(@Header("Authorization") String token);
+    Call<List<CinemaPOJO>> getMovies(@Header("Authorization") String token);
 
     @GET("/movie/ratings")
-    Call<List<MoviePOJO>> getMoviesByRating(@Query("r") int rating,@Header("Authorization") String token);
+    Call<List<CinemaPOJO>> getMoviesByRating(@Query("r") int rating,@Header("Authorization") String token);
 
     @GET("/movie/id")
     Call<CinemaPOJO> getCinema(@Query("id") String id, @Header("Authorization") String token);

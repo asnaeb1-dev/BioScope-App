@@ -6,4 +6,20 @@
 
     <color name="primary">#ed3f38</color>
     <color name="secondary">#ffe</color>
+
+    <color name="color_1">#a7ff83</color>
+    <color name="color_2">#17b978</color>
+    <color name="color_3">#9e579d</color>
+    <color name="color_4">#ba53de</color>
+    <color name="color_5">#364f6b</color>
+    <color name="color_6">#0e153a</color>
+    <color name="color_7">#581b98</color>
+    <color name="color_8">#2d6cdf</color>
+    <color name="color_9">#5d5d5a</color>
+    <color name="color_10">#cb3b3b</color>
+    <color name="color_11">#7c203a</color>
+    <color name="color_12">#a1eafb</color>
+    <color name="color_13">#ff304f</color>
+    <color name="color_14">#482ff7</color>
+
 </resources>

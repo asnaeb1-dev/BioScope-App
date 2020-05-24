@@ -3,23 +3,29 @@ package com.example.bioscope;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
@@ -39,6 +45,19 @@ import com.example.bioscope.POJO.Subclass.Video;
 import com.example.bioscope.Utility.Config;
 import com.example.bioscope.Utility.MainMovieObject;
 import com.example.bioscope.Utility.ViewPagerAdapter;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.extractor.ExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.upstream.BandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
@@ -56,13 +75,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MovieDetailsActivity extends AppCompatActivity {
 
     private SlidingUpPanelLayout slidingUpPanelLayout;
-    private TextView cinemaTitle, cinemaOverview, cinemalanguage, cinemaReleaseDate;
-    private LinearLayout actorLL, recommedationLL;
-    private ImageView cinemaPoster, backButton;
+    private TextView cinemaTitle, cinemaOverview, cinemalanguage, cinemaReleaseDate, tmdbRating;
+    private LinearLayout actorLL, recommedationLL, genreLL;
+    private ImageView cinemaPoster, backButton, isFavourite;
 
     private String movieID;
     private String url;
     private boolean isCalled = false;
+    private ProgressDialog dialog;
 
     private CinemaPOJO cinemaPOJO;
 
@@ -80,6 +100,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
         cinemaOverview = findViewById(R.id.cinemaOverView);
         actorLL = findViewById(R.id.actorListLL);
         recommedationLL = findViewById(R.id.recommedationLL);
+        tmdbRating = findViewById(R.id.tmdbRating);
+        genreLL = findViewById(R.id.genreLL);
+        isFavourite = findViewById(R.id.isFavourite);
+
         setPanelHeight();
     }
 
@@ -87,10 +111,11 @@ public class MovieDetailsActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        //movieID = getIntent().getStringExtra("movie_id");
-        movieID = "5ec92453d9d2f6001700fb71";
+        movieID = getIntent().getStringExtra("movie_id");
         if(movieID!=null){
             if(!isCalled){
+                dialog = ProgressDialog.show(this, "", "Loading. Please wait...", true);
+                dialog.show();
                 getMovieDetails();
                 isCalled = true;
             }
@@ -120,12 +145,15 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 if(response.isSuccessful()){
                     assert response.body()!=null;
                     cinemaPOJO = response.body();
+                    dialog.dismiss();
                     populateLayout();
                 }
             }
 
             @Override
             public void onFailure(Call<CinemaPOJO> call, Throwable t) {
+                dialog.dismiss();
+                getMovieDetails();
                 Log.e("ERROR", t.getMessage());
             }
         });
@@ -163,18 +191,21 @@ public class MovieDetailsActivity extends AppCompatActivity {
         }
         //set title
         cinemaTitle.setText(cinemaPOJO.getTitle());
+        //set overviiiew
         cinemaOverview.setText(cinemaPOJO.getDescription());
+        //set year of release
         cinemaReleaseDate.setText("Release: "+ cinemaPOJO.getYear());
+        //set language
         if( cinemaPOJO.getLanguage().equals("en")){
             cinemalanguage.setText("Language: English");
         }
+        //set video
+        if(cinemaPOJO.getVideos().size()>0){
+        }
+        //setRating
+        tmdbRating.setText(cinemaPOJO.getRating());
 
-        /*
-        RoundedBitmapDrawable dr =
-    RoundedBitmapDrawableFactory.create(res, src);
-dr.setCornerRadius(Math.max(src.getWidth(), src.getHeight()) / 2.0f);
-imageView.setImageDrawable(dr);
-         */
+        //set recommendation
         for(Recommendation recommendation: cinemaPOJO.getRecommendation()){
             final ImageView imageView = new ImageView(this);
             imageView.setPadding(10, 5, 10, 5);
@@ -196,8 +227,70 @@ imageView.setImageDrawable(dr);
                     });
             recommedationLL.addView(imageView);
         }
+
+        //set Genre
+        for(GenresArray genre : cinemaPOJO.getGenresArray()){
+
+            int range = 15;
+            int res = (int) ( Math.random()*range);
+            View view = getLayoutInflater().inflate(R.layout.genre_pod, genreLL,false);
+            TextView tv = view.findViewById(R.id.genreText);
+            CardView cardView = view.findViewById(R.id.genreCard);
+            tv.setText(genre.getGenre());
+            assignColor(res, cardView);
+            genreLL.addView(view);
+        }
     }
 
+    private void assignColor(int rand ,CardView c){
+        switch (rand){
+            case 0:
+                c.setCardBackgroundColor(getResources().getColor(R.color.color_1));
+                break;
+            case 1:
+                c.setCardBackgroundColor(getResources().getColor(R.color.color_2));
+                break;
+            case 2:
+                c.setCardBackgroundColor(getResources().getColor(R.color.color_3));
+                break;
+            case 3:
+                c.setCardBackgroundColor(getResources().getColor(R.color.color_4));
+                break;
+            case 4:
+                c.setCardBackgroundColor(getResources().getColor(R.color.color_5));
+                break;
+            case 5:
+                c.setCardBackgroundColor(getResources().getColor(R.color.color_6));
+                break;
+            case 6:
+                c.setCardBackgroundColor(getResources().getColor(R.color.color_7));
+                break;
+            case 7:
+                c.setCardBackgroundColor(getResources().getColor(R.color.color_8));
+                break;
+            case 8:
+                c.setCardBackgroundColor(getResources().getColor(R.color.color_14));
+                break;
+            case 9:
+                c.setCardBackgroundColor(getResources().getColor(R.color.color_9));
+                break;
+            case 10:
+                c.setCardBackgroundColor(getResources().getColor(R.color.color_10));
+                break;
+            case 11:
+                c.setCardBackgroundColor(getResources().getColor(R.color.color_11));
+                break;
+            case 12:
+                c.setCardBackgroundColor(getResources().getColor(R.color.color_12));
+                break;
+            case 13:
+                c.setCardBackgroundColor(getResources().getColor(R.color.color_13));
+                break;
+
+            default:
+                break;
+        }
+    }
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -206,5 +299,17 @@ imageView.setImageDrawable(dr);
 
     public void goBackFunction(View view) {
         finish();
+    }
+
+    public void addFavourite(View view) {
+        Toast.makeText(this, "Favourite" , Toast.LENGTH_SHORT).show();
+    }
+
+    public void playMovie(View view) {
+        Toast.makeText(this, "Play movie", Toast.LENGTH_SHORT).show();
+    }
+
+    public void downloadMedia(View view) {
+        Toast.makeText(this, "Download media", Toast.LENGTH_SHORT).show();
     }
 }
