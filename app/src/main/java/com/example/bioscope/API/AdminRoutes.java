@@ -1,9 +1,13 @@
 package com.example.bioscope.API;
 
+import com.example.bioscope.POJO.AdminPOJO;
+import com.example.bioscope.POJO.CinemaPOJO;
 import com.example.bioscope.POJO.CreateAdmin;
 import com.example.bioscope.POJO.LoginAdminPOJO;
+import com.example.bioscope.POJO.LogoutPOJO;
 import com.example.bioscope.POJO.PushClass;
 import com.example.bioscope.POJO.RemoveMovieAdmin;
+import com.example.bioscope.POJO.Subclass.AdminPresent;
 import com.example.bioscope.POJO.Suggestions;
 import com.example.bioscope.POJO.UploadedObj;
 
@@ -20,7 +24,7 @@ import retrofit2.http.Path;
 public interface AdminRoutes {
 
     @POST("/admin/create")
-    Call<CreateAdmin> createAdmin(@Body CreateAdmin createAdmin, @Header("specialtoken") String specialtoken);
+    Call<AdminPOJO> createAdmin(@Body AdminPresent adminPresent, @Header("specialtoken") String specialtoken);
 
     @POST("/admin/login")
     Call<LoginAdminPOJO> loginAdmin(@Body LoginAdminPOJO loginAdmin, @Header("specialtoken") String specialtoken);
@@ -32,8 +36,11 @@ public interface AdminRoutes {
     Call<PushClass> pushMovie(@Body PushClass pushClass, @Header("Authorization") String token);
 
     @GET("/admin/uploads")
-    Call<List<UploadedObj>> getUploadedMovies(@Header("Authorization") String token);
+    Call<List<CinemaPOJO>> getUploadedMovies(@Header("Authorization") String token);
 
     @DELETE("/admin/upload/delete/{id}")
-    Call<UploadedObj> removeMovie(@Path("id") String id, @Header("Authorization") String token);
+    Call<CinemaPOJO> removeMovie(@Path("id") String id, @Header("Authorization") String token);
+
+    @GET("/admin/logout")
+    Call<LogoutPOJO> logoutAdmin(@Header("Authorization") String token);
 }

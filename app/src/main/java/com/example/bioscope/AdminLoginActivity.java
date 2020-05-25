@@ -13,8 +13,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.bioscope.API.AdminRoutes;
+import com.example.bioscope.POJO.AdminPOJO;
 import com.example.bioscope.POJO.CreateAdmin;
 import com.example.bioscope.POJO.LoginAdminPOJO;
+import com.example.bioscope.POJO.Subclass.AdminPresent;
 import com.example.bioscope.Utility.Config;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -39,6 +41,7 @@ public class AdminLoginActivity extends AppCompatActivity {
     private ProgressBar signUpPogressBar;
 
     private SharedPreferences sharedPreferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +74,7 @@ public class AdminLoginActivity extends AppCompatActivity {
         super.onStart();
 
         sharedPreferences = getSharedPreferences("MY_PREFS", MODE_PRIVATE);
-        ///if the token is available then  login user directly else show login/signup screen
+        //if the token is available then  login user directly else show login/signup screen
         if(sharedPreferences.getString("ADMIN_TOKEN", null)!=null){
             startActivity(new Intent(this, UploaderActivity.class));
             finish();
@@ -180,15 +183,16 @@ public class AdminLoginActivity extends AppCompatActivity {
                 .build();
 
         AdminRoutes admin = retrofit.create(AdminRoutes.class);
-        CreateAdmin createUser = new CreateAdmin(username, password, email);
-        Call<CreateAdmin> call = admin.createAdmin(createUser, specialToken);
-        call.enqueue(new Callback<CreateAdmin>() {
+        AdminPresent createUser = new AdminPresent(username, email, password);
+        Call<AdminPOJO> call = admin.createAdmin(createUser, specialToken);
+        call.enqueue(new Callback<AdminPOJO>() {
             @Override
-            public void onResponse(Call<CreateAdmin> call, Response<CreateAdmin> response) {
+            public void onResponse(Call<AdminPOJO> call, Response<AdminPOJO> response) {
                 if(response.isSuccessful()){
                     assert response.body()!=null;
+                    String token = response.body().getToken();
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("ADMIN_TOKEN", response.body().getToken());
+                    editor.putString("ADMIN_TOKEN", token);
                     editor.apply();
                     clearSignUpInput();
                     startActivity(new Intent(getApplicationContext(), UploaderActivity.class));
@@ -197,7 +201,7 @@ public class AdminLoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<CreateAdmin> call, Throwable t) {
+            public void onFailure(Call<AdminPOJO> call, Throwable t) {
                 Log.e("ERROR", t.getMessage());
                 Snackbar.make(constraintLayout, t.getMessage(), Snackbar.LENGTH_SHORT).show();
                 signUpPogressBar.setVisibility(View.GONE);

@@ -17,15 +17,17 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.bioscope.POJO.CinemaPOJO;
 import com.example.bioscope.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class UploaderAdapter extends RecyclerView.Adapter<UploaderAdapter.Viewholder>{
     private Context context;
-    private ArrayList<UploaderMovieObj> movielist;
+    private List<CinemaPOJO> movielist;
 
-    public UploaderAdapter(Context context, ArrayList<UploaderMovieObj> movielist) {
+    public UploaderAdapter(Context context, List<CinemaPOJO> movielist) {
         this.context = context;
         this.movielist = movielist;
     }
@@ -43,12 +45,14 @@ public class UploaderAdapter extends RecyclerView.Adapter<UploaderAdapter.Viewho
     @Override
     public void onBindViewHolder(@NonNull final UploaderAdapter.Viewholder holder, final int position) {
         final String title = movielist.get(holder.getAdapterPosition()).getTitle(),
-                createdAt = movielist.get(holder.getAdapterPosition()).getCreatedAt(),
-                posterPath = movielist.get(holder.getAdapterPosition()).getPosterPath(),
-                url = movielist.get(holder.getAdapterPosition()).getUrl();
+                createdAt = movielist.get(holder.getAdapterPosition()).getCreatedAt();
 
-        Glide.with(context).load(new Config().getImageBaseUrl()+posterPath).into(holder.imageView);
-        holder.title.setText(title);
+        Glide.with(context).load(new Config().getImageBaseUrl()+movielist.get(holder.getAdapterPosition()).getPosters().get(0).getPosterPath()).into(holder.imageView);
+        if(movielist.get(holder.getAdapterPosition()).getTitle().length()>18){
+            holder.title.setText(movielist.get(holder.getAdapterPosition()).getTitle().substring(0, 17) + "...");
+        }else{
+            holder.title.setText(movielist.get(holder.getAdapterPosition()).getTitle());
+        }
         holder.createdAt.setText(createdAt.substring(0, 10));
 
         holder.delete.setOnClickListener(new View.OnClickListener() {
@@ -72,11 +76,8 @@ public class UploaderAdapter extends RecyclerView.Adapter<UploaderAdapter.Viewho
 
     @Override
     public int getItemCount() {
-        //this sets the size of the recycler view
-        //without this the recycler view will show 0 items
         return movielist.size();
     }
-
 
     public class Viewholder extends RecyclerView.ViewHolder
     {

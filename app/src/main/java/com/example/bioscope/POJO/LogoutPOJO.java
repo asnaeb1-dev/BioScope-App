@@ -3,7 +3,7 @@ package com.example.bioscope.POJO;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class LogoutUser {
+public class LogoutPOJO {
 
     @SerializedName("message")
     @Expose

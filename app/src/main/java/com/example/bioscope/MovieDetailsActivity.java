@@ -7,65 +7,32 @@ import androidx.cardview.widget.CardView;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.example.bioscope.API.TMDBRoutes;
 import com.example.bioscope.API.UserRoutes;
-import com.example.bioscope.POJO.AuxillaryResponse;
 import com.example.bioscope.POJO.CinemaPOJO;
-import com.example.bioscope.POJO.MoviePOJO;
-import com.example.bioscope.POJO.RecommendationPOJO;
 import com.example.bioscope.POJO.Subclass.Actor;
-import com.example.bioscope.POJO.Subclass.Backdrop;
 import com.example.bioscope.POJO.Subclass.GenresArray;
 import com.example.bioscope.POJO.Subclass.Poster;
 import com.example.bioscope.POJO.Subclass.Recommendation;
-import com.example.bioscope.POJO.Subclass.Video;
 import com.example.bioscope.Utility.Config;
-import com.example.bioscope.Utility.MainMovieObject;
-import com.example.bioscope.Utility.ViewPagerAdapter;
-import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.extractor.ExtractorsFactory;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
-import com.google.android.exoplayer2.upstream.BandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import de.hdodenhof.circleimageview.CircleImageView;
-import jp.wasabeef.blurry.Blurry;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -191,7 +158,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         }
         //set title
         cinemaTitle.setText(cinemaPOJO.getTitle());
-        //set overviiiew
+        //set overview
         cinemaOverview.setText(cinemaPOJO.getDescription());
         //set year of release
         cinemaReleaseDate.setText("Release: "+ cinemaPOJO.getYear());

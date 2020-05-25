@@ -9,34 +9,21 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 import android.view.ViewGroup;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.example.bioscope.API.TMDBRoutes;
 import com.example.bioscope.API.UserRoutes;
 import com.example.bioscope.POJO.CinemaPOJO;
-import com.example.bioscope.POJO.LogoutUser;
-import com.example.bioscope.POJO.MoviePOJO;
-import com.example.bioscope.POJO.TMDBAPI.NowPlaying;
+import com.example.bioscope.POJO.LogoutPOJO;
 import com.example.bioscope.Utility.Config;
-import com.example.bioscope.Utility.MainMovieObject;
-import com.example.bioscope.Utility.TMDBMovieObject;
-import com.example.bioscope.Utility.TmdbRVAdapter;
-import com.example.bioscope.Utility.ViewPagerAdapter;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
@@ -48,15 +35,9 @@ import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import jp.wasabeef.blurry.Blurry;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -230,7 +211,7 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
         int id = item.getItemId();
         switch (id){
             case R.id.nav_profile:
-                startActivity(new Intent(getApplicationContext(), UserProfileActivity.class));
+                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
                 break;
 
             case R.id.nav_settings:
@@ -266,10 +247,10 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
                 .build();
 
         UserRoutes user = retrofit.create(UserRoutes.class);
-        Call<LogoutUser> call = user.logoutUser(getSharedPreferences("MY_PREFS", MODE_PRIVATE).getString("USER_TOKEN", null));
-        call.enqueue(new Callback<LogoutUser>() {
+        Call<LogoutPOJO> call = user.logoutUser(getSharedPreferences("MY_PREFS", MODE_PRIVATE).getString("USER_TOKEN", null));
+        call.enqueue(new Callback<LogoutPOJO>() {
             @Override
-            public void onResponse(Call<LogoutUser> call, Response<LogoutUser> response) {
+            public void onResponse(Call<LogoutPOJO> call, Response<LogoutPOJO> response) {
                 if(response.isSuccessful()){
                     assert response.body()!=null;
                     if(response.body().getMessage().equals("logged_out")){
@@ -285,7 +266,7 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
             }
 
             @Override
-            public void onFailure(Call<LogoutUser> call, Throwable t) {
+            public void onFailure(Call<LogoutPOJO> call, Throwable t) {
                 progressDialog.dismiss();
                 Log.e("ERROR", t.getMessage());
             }
