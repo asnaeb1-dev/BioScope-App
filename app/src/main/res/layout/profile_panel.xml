@@ -11,6 +11,7 @@
         android:layout_height="match_parent">
 
         <TextView
+            android:id="@+id/profileName"
             android:textSize="18sp"
             android:gravity="center"
             android:text="Abhigyan Raha"

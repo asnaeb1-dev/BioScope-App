@@ -60,6 +60,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <include
+            layout="@layout/profile_panel"
             />
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

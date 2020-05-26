@@ -4,13 +4,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
+import android.app.AlertDialog;
+import android.app.DownloadManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -30,6 +36,7 @@ import com.example.bioscope.POJO.Subclass.GenresArray;
 import com.example.bioscope.POJO.Subclass.Poster;
 import com.example.bioscope.POJO.Subclass.Recommendation;
 import com.example.bioscope.Utility.Config;
+import com.google.android.material.snackbar.Snackbar;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -45,7 +52,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private TextView cinemaTitle, cinemaOverview, cinemalanguage, cinemaReleaseDate, tmdbRating;
     private LinearLayout actorLL, recommedationLL, genreLL;
     private ImageView cinemaPoster, backButton, isFavourite;
-
+    private ConstraintLayout constraintLayout;
     private String movieID;
     private String url;
     private boolean isCalled = false;
@@ -58,6 +65,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
 
+        constraintLayout = findViewById(R.id.cL);
         slidingUpPanelLayout = findViewById(R.id.movieDetailsSlider);
         cinemaPoster = findViewById(R.id.cinemaPoster);
         backButton = findViewById(R.id.backButton);
@@ -103,6 +111,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
         return new Retrofit.Builder().baseUrl(url).addConverterFactory(GsonConverterFactory.create()).build();
     }
 
+    private int generateRandomNumber(int min, int max){
+        return min + (int)(Math.random() * ((max - min) + 1));
+    }
+
     private void getMovieDetails(){
         UserRoutes user = initializeRetrofit(Config.getBaseUrl()).create(UserRoutes.class);
         Call<CinemaPOJO> call = user.getCinema(movieID, getSharedPreferences("MY_PREFS", MODE_PRIVATE).getString("USER_TOKEN", null));
@@ -128,15 +140,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
     private void populateLayout() {
         //set main poster
-        for(Poster poster : cinemaPOJO.getPosters()){
-            if(poster.getHeight() == 3000 && poster.getWidth() == 2000){
-                Glide.with(this).load(new Config().getImageBaseUrl() + poster.getPosterPath()).into(cinemaPoster);
-                break;
-            }
-        }
+
+        String url ="https://image.tmdb.org/t/p/original"+cinemaPOJO.getPosters().get(generateRandomNumber(0, cinemaPOJO.getPosters().size()-1)).getPosterPath();
+        Glide.with(this).load(url).into(cinemaPoster);
+
         actorLL.removeAllViews();
         recommedationLL.removeAllViews();
-        for(Actor actor : cinemaPOJO.getActors()){
+        for(final Actor actor : cinemaPOJO.getActors()){
             if(actor.getActorPoster()!=null){
                 final CircleImageView circleImageView = new CircleImageView(this);
                 circleImageView.setLayoutParams(new LinearLayout.LayoutParams(200, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -154,6 +164,23 @@ public class MovieDetailsActivity extends AppCompatActivity {
                             }
                         });
                 actorLL.addView(circleImageView);
+
+                circleImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        View view = MovieDetailsActivity.this.getLayoutInflater().inflate(R.layout.cast_dialog_ui, null);
+                        TextView name = view.findViewById(R.id.actorName),
+                                characterName = view.findViewById(R.id.castCharacterName);
+                        CircleImageView ci = view.findViewById(R.id.castProfilePic);
+                        name.setText("Name: " +actor.getActor());
+                        characterName.setText("Character: "+actor.getActorCharacter());
+                        Glide.with(MovieDetailsActivity.this).load(new Config().getImageBaseUrl() + actor.getActorPoster()).into(ci);
+                        new AlertDialog.Builder(MovieDetailsActivity.this)
+                                .setView(view)
+                                .show();
+                    }
+                });
+
             }
         }
         //set title
@@ -277,6 +304,17 @@ public class MovieDetailsActivity extends AppCompatActivity {
     }
 
     public void downloadMedia(View view) {
-        Toast.makeText(this, "Download media", Toast.LENGTH_SHORT).show();
+        if(cinemaPOJO.getUrl()!=null){
+            DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+            Uri uri = Uri.parse(cinemaPOJO.getUrl());
+            DownloadManager.Request request = new DownloadManager.Request(uri);
+            request.setVisibleInDownloadsUi(true);
+            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, uri.getLastPathSegment());
+            downloadManager.enqueue(request);
+            Snackbar.make(constraintLayout, "Downloading "+ cinemaPOJO.getTitle(), Snackbar.LENGTH_SHORT).show();
+        }else{
+            Snackbar.make(constraintLayout, "Sorry! Download link unavailable.", Snackbar.LENGTH_SHORT).show();
+        }
     }
 }

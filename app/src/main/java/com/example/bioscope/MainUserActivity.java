@@ -48,7 +48,7 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
 
     private DrawerLayout drawer;
     private NavigationView navigationView;
-    private SearchView searchView;
+    private ImageView refreshButton;
     private LinearLayout watchNowLL, topRatedLL;
     private ProgressDialog progressDialog;
 
@@ -59,10 +59,17 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
 
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
-        searchView = findViewById(R.id.searchView);
+        refreshButton = findViewById(R.id.refresh);
         watchNowLL = findViewById(R.id.watchNowLL);
         topRatedLL = findViewById(R.id.topRatedLL);
         navigationView.setNavigationItemSelectedListener(this);
+
+        progressDialog = ProgressDialog.show(this, getResources().getString(R.string.app_name), "Loading. Please wait...", true);
+        progressDialog.show();
+
+
+        getWatchNow();
+        getTopRated(7);
     }
 
     @Override
@@ -71,10 +78,17 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        progressDialog = ProgressDialog.show(this, "", "Loading. Please wait...", true);
-        progressDialog.show();
-        getWatchNow();
-        getTopRated(7);
+
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progressDialog = ProgressDialog.show(MainUserActivity.this, getResources().getString(R.string.app_name), "Loading. Please wait...", true);
+                progressDialog.show();
+                getWatchNow();
+                getTopRated(7);
+            }
+        });
+
     }
 
     private void getTopRated(int i) {

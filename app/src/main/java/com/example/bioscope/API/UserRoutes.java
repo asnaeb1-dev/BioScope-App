@@ -2,6 +2,7 @@ package com.example.bioscope.API;
 
 import com.example.bioscope.POJO.CinemaPOJO;
 import com.example.bioscope.POJO.LogoutPOJO;
+import com.example.bioscope.POJO.UserPOJO;
 import com.example.bioscope.POJO.UserSignUp;
 
 import java.util.List;
@@ -33,6 +34,6 @@ public interface UserRoutes {
     @GET("/movie/id")
     Call<CinemaPOJO> getCinema(@Query("id") String id, @Header("Authorization") String token);
 
-    //@GET("/user/me")
-
+    @GET("/user/me")
+    Call<UserPOJO> getUserProfile(@Header("Authorization") String token);
 }

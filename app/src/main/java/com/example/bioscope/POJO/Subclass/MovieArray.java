@@ -8,9 +8,15 @@ public class MovieArray {
     @SerializedName("_id")
     @Expose
     private String id;
-    @SerializedName("movie")
+    @SerializedName("movieName")
     @Expose
-    private String movie;
+    private String movieName;
+    @SerializedName("movie_id")
+    @Expose
+    private String movieId;
+    @SerializedName("movie_poster")
+    @Expose
+    private String moviePoster;
 
     public String getId() {
         return id;
@@ -20,11 +26,28 @@ public class MovieArray {
         this.id = id;
     }
 
-    public String getMovie() {
-        return movie;
+    public String getMovieName() {
+        return movieName;
     }
 
-    public void setMovie(String movie) {
-        this.movie = movie;
+    public void setMovieName(String movieName) {
+        this.movieName = movieName;
     }
+
+    public String getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(String movieId) {
+        this.movieId = movieId;
+    }
+
+    public String getMoviePoster() {
+        return moviePoster;
+    }
+
+    public void setMoviePoster(String moviePoster) {
+        this.moviePoster = moviePoster;
+    }
+
 }

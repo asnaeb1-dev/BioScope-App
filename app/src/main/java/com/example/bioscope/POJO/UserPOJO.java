@@ -1,10 +1,11 @@
 package com.example.bioscope.POJO;
 
-import java.util.List;
-
+import com.example.bioscope.POJO.Subclass.GenreChoice;
 import com.example.bioscope.POJO.Subclass.MovieArray;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 public class UserPOJO {
 
@@ -22,7 +23,7 @@ public class UserPOJO {
     private List<MovieArray> movieArray = null;
     @SerializedName("genre_choices")
     @Expose
-    private List<Object> genreChoices = null;
+    private List<GenreChoice> genreChoices = null;
     @SerializedName("__v")
     @Expose
     private Integer v;
@@ -43,39 +44,39 @@ public class UserPOJO {
         this.name = name;
     }
 
-        public String getEmail() {
-            return email;
-        }
-
-        public void setEmail(String email) {
-            this.email = email;
-        }
-
-        public List<MovieArray> getMovieArray() {
-            return movieArray;
-        }
-
-        public void setMovieArray(List<MovieArray> movieArray) {
-            this.movieArray = movieArray;
-        }
-
-        public List<Object> getGenreChoices() {
-            return genreChoices;
-        }
-
-        public void setGenreChoices(List<Object> genreChoices) {
-            this.genreChoices = genreChoices;
-        }
-
-        public Integer getV() {
-            return v;
-        }
-
-        public void setV(Integer v) {
-            this.v = v;
-        }
-
+    public String getEmail() {
+        return email;
     }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public List<MovieArray> getMovieArray() {
+        return movieArray;
+    }
+
+    public void setMovieArray(List<MovieArray> movieArray) {
+        this.movieArray = movieArray;
+    }
+
+    public List<GenreChoice> getGenreChoices() {
+        return genreChoices;
+    }
+
+    public void setGenreChoices(List<GenreChoice> genreChoices) {
+        this.genreChoices = genreChoices;
+    }
+
+    public Integer getV() {
+        return v;
+    }
+
+    public void setV(Integer v) {
+        this.v = v;
+    }
+
+}
 
 
 
