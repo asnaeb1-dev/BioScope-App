@@ -34,11 +34,14 @@ import com.example.bioscope.API.UserRoutes;
 import com.example.bioscope.POJO.CinemaPOJO;
 import com.example.bioscope.POJO.Subclass.Actor;
 import com.example.bioscope.POJO.Subclass.GenresArray;
+import com.example.bioscope.POJO.Subclass.MovieArray;
 import com.example.bioscope.POJO.Subclass.Poster;
 import com.example.bioscope.POJO.Subclass.Recommendation;
 import com.example.bioscope.Utility.Config;
 import com.google.android.material.snackbar.Snackbar;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -304,6 +307,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         //sve to database
         //play movie
         if(cinemaPOJO.getUrl()!=null){
+            pushMovieWatchedToDB();
             Intent intent = new Intent(this, VideoPlayerActivity.class);
             intent.putExtra("video_url", cinemaPOJO.getUrl());
             startActivity(intent);
@@ -311,6 +315,36 @@ public class MovieDetailsActivity extends AppCompatActivity {
             Toast.makeText(this, "Sorry! This movie is unavailable", Toast.LENGTH_SHORT).show();
         }
     }
+
+    private void pushMovieWatchedToDB() {
+        String movieid = cinemaPOJO.getId();
+        String movieName = cinemaPOJO.getTitle();
+        String moviePoster = cinemaPOJO.getPosters().get(0).getPosterPath();
+
+        UserRoutes user = initializeRetrofit(Config.getBaseUrl()).create(UserRoutes.class);
+
+        MovieArray movieArray = new MovieArray();
+        movieArray.setMovieId(movieid);
+        movieArray.setMovieName(movieName);
+        movieArray.setMoviePoster(moviePoster);
+
+
+        Call<List<MovieArray>> call = user.pushMovieWatched(movieArray, getSharedPreferences("MY_PREFS", MODE_PRIVATE).getString("USER_TOKEN", null));
+        call.enqueue(new Callback<List<MovieArray>>() {
+            @Override
+            public void onResponse(Call<List<MovieArray>> call, Response<List<MovieArray>> response) {
+                if(response.isSuccessful()){
+                    assert response.body()!=null;
+                    Toast.makeText(MovieDetailsActivity.this, "Pushed!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<MovieArray>> call, Throwable t) {
+            }
+        });
+    }
+
     public void downloadMedia(View view) {
         if(cinemaPOJO.getUrl()!=null){
             DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);

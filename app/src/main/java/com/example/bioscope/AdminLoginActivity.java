@@ -9,9 +9,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.bioscope.API.AdminRoutes;
 import com.example.bioscope.POJO.AdminPOJO;
 import com.example.bioscope.POJO.CreateAdmin;
@@ -37,7 +39,7 @@ public class AdminLoginActivity extends AppCompatActivity {
     private TextView loginTV, signUpTV;
     private TextInputEditText emailETAdminLogin, passwordETAdminLogin, spclTokenETAdminLogin;
     private TextInputEditText emailETAdminSignUp, passwordETAdminSingUp, spclTokenAdminSignUp, usernameETAdminSignUp;
-
+    private ImageView imageView;
     private ProgressBar signUpPogressBar;
 
     private SharedPreferences sharedPreferences;
@@ -55,7 +57,7 @@ public class AdminLoginActivity extends AppCompatActivity {
         loginTV = findViewById(R.id.adminLoginText);
         signUpTV = findViewById(R.id.adminsignupText);
         loginFab = findViewById(R.id.fabLoginAdmin);
-
+        imageView = findViewById(R.id.adminBackImage);
         emailETAdminSignUp = findViewById(R.id.emailETAdminSignup);
         passwordETAdminSingUp = findViewById(R.id.passwordETAdminSignup);
         spclTokenAdminSignUp = findViewById(R.id.specTokenAdminSignupET);
@@ -80,7 +82,7 @@ public class AdminLoginActivity extends AppCompatActivity {
             finish();
             return;
         }
-
+        Glide.with(this).asGif().load(getResources().getString(R.string.gif2)).into(imageView);
         setPanelAttributes();
         setClickListeners();
     }
@@ -133,7 +135,6 @@ public class AdminLoginActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private boolean validateInput(String username, String password, String email, String specialToken) {
         if(username.equals("") || email.equals("") || password.equals("") || specialToken.equals("")){

@@ -8,10 +8,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.bioscope.API.AdminRoutes;
 import com.example.bioscope.API.UserRoutes;
 import com.example.bioscope.POJO.CreateAdmin;
@@ -38,6 +40,7 @@ public class UserLoginActivity extends AppCompatActivity {
     private ProgressBar signUPPB, loginPB;
     private ConstraintLayout houserLayoutUser;
     private SharedPreferences sharedPreferences;
+    private ImageView userLoginBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +52,7 @@ public class UserLoginActivity extends AppCompatActivity {
             finish();
         }
 
+        userLoginBack = findViewById(R.id.userLoginBack);
         houserLayoutUser = findViewById(R.id.house_Layout_user);
         slidingUpPanelLayout = findViewById(R.id.userPanel);
         //sign up
@@ -65,6 +69,7 @@ public class UserLoginActivity extends AppCompatActivity {
         passwordETLogin = findViewById(R.id.passswordETUserLogin);
         loginFAB = findViewById(R.id.userLoginFAB);
         loginPB = findViewById(R.id.userLoginPB);
+
     }
 
     @Override
@@ -72,6 +77,7 @@ public class UserLoginActivity extends AppCompatActivity {
         super.onStart();
 
         sharedPreferences = getSharedPreferences("MY_PREFS", MODE_PRIVATE);
+        Glide.with(this).asGif().load(getResources().getString(R.string.gif)).into(userLoginBack);
         signupFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
