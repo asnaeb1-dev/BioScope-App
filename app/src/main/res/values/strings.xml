@@ -18,9 +18,25 @@
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
     <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer malesuada quam a turpis ultrices, vitae lacinia ipsum venenatis. Aliquam rutrum vestibulum mi. Curabitur in bibendum libero. Duis fermentum, mauris a tempor interdum, massa tortor fringilla justo, ac cursus leo ligula ut quam. Morbi et consequat nulla. Suspendisse potenti. Morbi risus arcu, placerat sit amet turpis quis, imperdiet euismod risus. Donec tempor sed nunc et tincidunt. Donec elementum, odio id placerat imperdiet, quam nulla rutrum risus, sed lobortis orci orci vitae nunc.guch</string>
+    <string name="deepak_das_desc">You can never win in a verbal battle against me nor can you solve advanced mathematical problems involved in machine learning like I can. I designed the entire recommendation system in this app in "1 DAY". Go figure. </string>
+    <string name="abhigyan_raha_desc">Well, I am Ironman. I can take care of all your IT needs single handed. That is exactly how smart I am. I designed the entire mobile app and the backend of this project. Like I said, I am Ironman.</string>
+    <string name="priyambad_desc">They call me the big guy. And big guy here takes care of everything. Call me when sh*t hits the fan and I can make it all go away. I designed the website and took care of deploying everything there is to be deployed.</string>
     <string name="my_profile">My Profile</string>
     <string name="settings">Settings</string>
     <string name="now_playing">Now Playing</string>
     <string name="cast">Cast</string>
     <string name="recommended">Recommended</string>
+    <string name="about">About</string>
+
+    <string name="deepak_github_link">https://github.com/dD2405</string>
+    <string name="deepak_linkedin_link">https://www.linkedin.com/in/deepak-das-profile/</string>
+
+    <string name="abhigyan_github_link">https://github.com/asnaeb1-dev</string>
+    <string name="abhigyan_linkedin_link">https://www.linkedin.com/in/abhigyan-raha/</string>
+
+    <string name="priyamvad_linked_link">https://www.linkedin.com/in/priyamvad-singh-680546147/</string>
+    <string name="priyamvad_github_link">https://github.com/priyamvadthegame</string>
+
+    <string name="gif">https://media.giphy.com/media/Yr0WpfGegdgcdqZXcL/giphy.gif</string>
+    <string name="gif2">https://media.giphy.com/media/wkSyGueYTnk40/giphy.gif</string>
 </resources>

@@ -8,47 +8,40 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView firstText, secondText;
-    private Button adminButton, userButton;
-    private SharedPreferences sharedPreferences;
+    private ImageView backgroundImg, backgroundImg2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        adminButton = findViewById(R.id.adminButton);
-        userButton = findViewById(R.id.userButton);
-
-        firstText = findViewById(R.id.firstText);
-        firstText.animate().alphaBy(1).setDuration(2000);
-        secondText = findViewById(R.id.secondText);
-        secondText.animate().alphaBy(1).setDuration(2000);
+        backgroundImg = findViewById(R.id.backGroundImg);
+        backgroundImg2 = findViewById(R.id.backGroundImg2);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         //access the token
+        Glide.with(this).asGif().load(getResources().getString(R.string.gif)).into(backgroundImg);
+        Glide.with(this).asGif().load(getResources().getString(R.string.gif2)).into(backgroundImg2);
+    }
 
-        adminButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, AdminLoginActivity.class));
-                finish();
-            }
-        });
+    public void watchFunction(View view) {
+        startActivity(new Intent(getApplicationContext(), UserLoginActivity.class));
+        finish();
+    }
 
-        userButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), UserLoginActivity.class));
-                finish();
-            }
-        });
+    public void adminFunction(View view) {
+        startActivity(new Intent(MainActivity.this, AdminLoginActivity.class));
+        finish();
+
     }
 }

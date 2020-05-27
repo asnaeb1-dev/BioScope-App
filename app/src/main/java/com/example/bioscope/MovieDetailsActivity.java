@@ -12,6 +12,7 @@ import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -300,9 +301,16 @@ public class MovieDetailsActivity extends AppCompatActivity {
     }
 
     public void playMovie(View view) {
-        Toast.makeText(this, "Play movie", Toast.LENGTH_SHORT).show();
+        //sve to database
+        //play movie
+        if(cinemaPOJO.getUrl()!=null){
+            Intent intent = new Intent(this, VideoPlayerActivity.class);
+            intent.putExtra("video_url", cinemaPOJO.getUrl());
+            startActivity(intent);
+        }else{
+            Toast.makeText(this, "Sorry! This movie is unavailable", Toast.LENGTH_SHORT).show();
+        }
     }
-
     public void downloadMedia(View view) {
         if(cinemaPOJO.getUrl()!=null){
             DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);

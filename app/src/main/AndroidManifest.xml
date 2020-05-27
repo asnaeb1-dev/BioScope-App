@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.bioscope">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -13,14 +14,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ProfileActivity">
-
-
-
-        </activity>
-        <activity android:name=".VideoPlayerActivity" />
-        <activity android:name=".MovieDetailsActivity">
-        </activity>
+        <activity android:name=".AboutActivity"></activity>
+        <activity android:name=".ProfileActivity"></activity>
+        <activity android:name=".VideoPlayerActivity"
+            android:screenOrientation="landscape"
+            tools:ignore="LockedOrientationActivity"/>
+        <activity android:name=".MovieDetailsActivity"></activity>
         <activity
             android:name=".MainUserActivity"
             android:label="@string/title_activity_main_user"
@@ -29,7 +28,6 @@
         <activity android:name=".AdminLoginActivity" />
         <activity android:name=".UserLoginActivity" />
         <activity android:name=".MainActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

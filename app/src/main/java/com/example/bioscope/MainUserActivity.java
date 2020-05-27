@@ -67,7 +67,6 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
         progressDialog = ProgressDialog.show(this, getResources().getString(R.string.app_name), "Loading. Please wait...", true);
         progressDialog.show();
 
-
         getWatchNow();
         getTopRated(7);
     }
@@ -236,6 +235,10 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
                 Toast.makeText(this, "Slideshow", Toast.LENGTH_SHORT).show();
                 break;
 
+            case R.id.nav_about:
+                startActivity(new Intent(MainUserActivity.this, AboutActivity.class));
+                break;
+
             case R.id.nav_logout:
                 new AlertDialog.Builder(MainUserActivity.this)
                         .setTitle("Logout user")
@@ -243,7 +246,7 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                progressDialog = ProgressDialog.show(getApplicationContext(), "", "Loading. Please wait...", true);
+                                progressDialog = ProgressDialog.show(MainUserActivity.this, "", "Loading. Please wait...", true);
                                 progressDialog.show();
                                 logoutUser();
                             }
@@ -294,4 +297,5 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
 
         finish();
     }
+
 }
