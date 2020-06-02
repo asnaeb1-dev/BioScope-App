@@ -38,6 +38,7 @@ import com.example.bioscope.POJO.Subclass.MovieArray;
 import com.example.bioscope.POJO.Subclass.Poster;
 import com.example.bioscope.POJO.Subclass.Recommendation;
 import com.example.bioscope.Utility.Config;
+import com.example.bioscope.Utility.LastPlayed;
 import com.google.android.material.snackbar.Snackbar;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
@@ -108,7 +109,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         slidingUpPanelLayout.setPanelHeight(displayMetrics.heightPixels/2 - 100);
-
     }
 
     private Retrofit initializeRetrofit(String url){
@@ -289,6 +289,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 break;
         }
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -308,6 +309,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
         //play movie
         if(cinemaPOJO.getUrl()!=null){
             pushMovieWatchedToDB();
+            if(cinemaPOJO.getBackdrops().get(0).getBackdropPath() != null){
+                new LastPlayed(cinemaPOJO.getTitle(), cinemaPOJO.getId(), cinemaPOJO.getTmdbId(), cinemaPOJO.getPosters().get(0).getPosterPath(), cinemaPOJO.getBackdrops().get(0).getBackdropPath(), this, cinemaPOJO.getUrl());
+            }else{
+                new LastPlayed(cinemaPOJO.getTitle(), cinemaPOJO.getId(), cinemaPOJO.getTmdbId(), cinemaPOJO.getPosters().get(0).getPosterPath(), "", this, cinemaPOJO.getUrl());
+            }
+
             Intent intent = new Intent(this, VideoPlayerActivity.class);
             intent.putExtra("video_url", cinemaPOJO.getUrl());
             startActivity(intent);
@@ -326,7 +333,11 @@ public class MovieDetailsActivity extends AppCompatActivity {
         MovieArray movieArray = new MovieArray();
         movieArray.setMovieId(movieid);
         movieArray.setMovieName(movieName);
-        movieArray.setMoviePoster(moviePoster);
+        if(moviePoster!=null){
+            movieArray.setMoviePoster(moviePoster);
+        }else{
+            movieArray.setMoviePoster("");
+        }
 
 
         Call<List<MovieArray>> call = user.pushMovieWatched(movieArray, getSharedPreferences("MY_PREFS", MODE_PRIVATE).getString("USER_TOKEN", null));
@@ -335,7 +346,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
             public void onResponse(Call<List<MovieArray>> call, Response<List<MovieArray>> response) {
                 if(response.isSuccessful()){
                     assert response.body()!=null;
-                    Toast.makeText(MovieDetailsActivity.this, "Pushed!", Toast.LENGTH_SHORT).show();
                 }
             }
 

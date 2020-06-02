@@ -80,7 +80,16 @@ public class ProfileActivity extends AppCompatActivity {
         width = displayMetrics.widthPixels;
         slidingUpPanelLayout.setPanelHeight(height/2 + 100);
         getProfile();
+
+        settingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ProfileActivity.this, SettingsActivity.class));
+            }
+        });
+
     }
+
 
     private void getProfile(){
         progressDialog = ProgressDialog.show(this, getResources().getString(R.string.app_name), "Loading. Please wait...", true);

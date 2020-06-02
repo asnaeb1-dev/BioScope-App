@@ -22,6 +22,7 @@ public class UserSignUp {
     @Expose
     private String token;
 
+
     public UserSignUp(String name, String email, String password) {
         this.name = name;
         this.email = email;

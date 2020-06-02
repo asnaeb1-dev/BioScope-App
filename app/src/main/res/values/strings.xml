@@ -28,6 +28,11 @@
     <string name="recommended">Recommended</string>
     <string name="about">About</string>
 
+
+    <string name="password_size_prompt">Password must be 8 characters</string>
+    <string name="email_exists_message">This email already exists!</string>
+    <string name="fields_empty_prompt">Cannot leave fields empty!</string>
+
     <string name="deepak_github_link">https://github.com/dD2405</string>
     <string name="deepak_linkedin_link">https://www.linkedin.com/in/deepak-das-profile/</string>
 

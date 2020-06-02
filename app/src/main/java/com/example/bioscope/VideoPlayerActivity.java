@@ -44,14 +44,13 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
 public class VideoPlayerActivity extends AppCompatActivity implements Player.EventListener {
-    private static final String TAG = "ExoPlayerActivity";
-    private static final String KEY_VIDEO_URI = "video_uri";
-    PlayerView videoFullScreenPlayer;
-    ProgressBar spinnerVideoDetails;
-    ImageView imageViewExit;
-    SimpleExoPlayer player;
-    Handler mHandler;
-    Runnable mRunnable;
+
+    private PlayerView videoFullScreenPlayer;
+    private ProgressBar spinnerVideoDetails;
+    private ImageView imageViewExit;
+    private SimpleExoPlayer player;
+    private Handler mHandler;
+    private Runnable mRunnable;
 
     private String url;
 
@@ -69,7 +68,6 @@ public class VideoPlayerActivity extends AppCompatActivity implements Player.Eve
         videoFullScreenPlayer = findViewById(R.id.videoFullScreenPlayer);
         spinnerVideoDetails = findViewById(R.id.spinnerVideoDetails);
         imageViewExit = findViewById(R.id.imageViewExit);
-
     }
 
     @Override
@@ -116,6 +114,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements Player.Eve
             videoFullScreenPlayer.setPlayer(player);
         }
     }
+
     private void buildMediaSource(Uri mUri) {
         // Measures bandwidth during playback. Can be null if not required.
         DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
@@ -136,18 +135,21 @@ public class VideoPlayerActivity extends AppCompatActivity implements Player.Eve
             player = null;
         }
     }
+
     private void pausePlayer() {
         if (player != null) {
             player.setPlayWhenReady(false);
             player.getPlaybackState();
         }
     }
+
     private void resumePlayer() {
         if (player != null) {
             player.setPlayWhenReady(true);
             player.getPlaybackState();
         }
     }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -156,16 +158,19 @@ public class VideoPlayerActivity extends AppCompatActivity implements Player.Eve
             mHandler.removeCallbacks(mRunnable);
         }
     }
+
     @Override
     protected void onRestart() {
         super.onRestart();
         resumePlayer();
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         releasePlayer();
     }
+
     @Override
     public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
     }

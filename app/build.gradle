@@ -49,5 +49,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     implementation 'com.google.android.exoplayer:exoplayer:2.7.3'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation 'com.dmitrymalkovich.android:progress-fab:1.6'
+
 
 }

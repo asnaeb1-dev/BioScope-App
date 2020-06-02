@@ -6,6 +6,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -116,6 +118,45 @@ public class UserLoginActivity extends AppCompatActivity {
                 slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
             }
         });
+
+        passwordETLogin.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()<8){
+                    passwordETLogin.setError(getResources().getString(R.string.password_size_prompt));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        passwordET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length() < 8){
+                    passwordET.setError(getResources().getString(R.string.password_size_prompt));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
     }
 
     private void loginUser(String email, String password) {
@@ -137,9 +178,10 @@ public class UserLoginActivity extends AppCompatActivity {
                     editor.apply();
                     startActivity(new Intent(getApplicationContext(), MainUserActivity.class));
                     finish();
-
-                    signUPPB.setVisibility(View.GONE);
+                }else{
+                    Snackbar.make(houserLayoutUser, "Incorrect email or password.", Snackbar.LENGTH_SHORT).show();
                 }
+                signUPPB.setVisibility(View.GONE);
             }
 
             @Override
@@ -154,10 +196,10 @@ public class UserLoginActivity extends AppCompatActivity {
 
     private boolean validateLoginInput(String email, String password){
         if(email.isEmpty() || password.isEmpty()){
-            Snackbar.make(houserLayoutUser, "Cannot leave fields empty", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(houserLayoutUser, getResources().getString(R.string.fields_empty_prompt), Snackbar.LENGTH_SHORT).show();
             return false;
         }else if( password.length()< 8){
-            Snackbar.make(houserLayoutUser, "Length must be at least 8 characters", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(houserLayoutUser, getResources().getString(R.string.password_size_prompt), Snackbar.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -165,10 +207,10 @@ public class UserLoginActivity extends AppCompatActivity {
 
     private boolean validateSignUpInput(String username, String email, String password){
         if(username.isEmpty() || email.isEmpty() || password.isEmpty()){
-            Snackbar.make(houserLayoutUser, "Cannot leave fields empty!", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(houserLayoutUser, getResources().getString(R.string.fields_empty_prompt), Snackbar.LENGTH_SHORT).show();
             return false;
         }else if(password.length() < 8){
-            Snackbar.make(houserLayoutUser, "Password length is not right!", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(houserLayoutUser, getResources().getString(R.string.password_size_prompt), Snackbar.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -180,36 +222,40 @@ public class UserLoginActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        UserRoutes admin = retrofit.create(UserRoutes.class);
+        UserRoutes user = retrofit.create(UserRoutes.class);
         UserSignUp userSignUp = new UserSignUp(username, email, password);
-        Call<UserSignUp> call = admin.createUser(userSignUp);
+        Call<UserSignUp> call = user.createUser(userSignUp);
         call.enqueue(new Callback<UserSignUp>() {
             @Override
             public void onResponse(Call<UserSignUp> call, Response<UserSignUp> response) {
                 if(response.isSuccessful()){
                     assert response.body()!=null;
-                    Toast.makeText(UserLoginActivity.this, response.body().getToken(), Toast.LENGTH_SHORT).show();
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("USER_TOKEN", response.body().getToken());
                     editor.apply();
-                    signUPPB.setVisibility(View.GONE);
+                    startActivity(new Intent(getApplicationContext(), MainUserActivity.class));
+                    finish();
+                }else{
+                    Snackbar.make(houserLayoutUser, getResources().getString(R.string.email_exists_message), Snackbar.LENGTH_SHORT).show();
                 }
+                signUPPB.setVisibility(View.GONE);
             }
 
             @Override
             public void onFailure(Call<UserSignUp> call, Throwable t) {
                 Log.e("ERROR", t.getMessage());
                 signUPPB.setVisibility(View.GONE);
+                Snackbar.make(houserLayoutUser, "Something went wrong. Try again", Snackbar.LENGTH_SHORT).show();
             }
         });
+
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         if(slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED){
             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-            return;
+            super.onBackPressed();
         }else{
             finish();
         }

@@ -13,17 +13,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 import android.view.ViewGroup;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.bioscope.API.UserRoutes;
+import com.example.bioscope.DialogBox.GenreDialog;
 import com.example.bioscope.POJO.CinemaPOJO;
 import com.example.bioscope.POJO.LogoutPOJO;
 import com.example.bioscope.Utility.Config;
+import com.example.bioscope.Utility.GenreSelectorRV;
+import com.example.bioscope.Utility.LastPlayed;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
@@ -35,9 +40,14 @@ import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -51,6 +61,7 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
     private ImageView refreshButton;
     private LinearLayout watchNowLL, topRatedLL;
     private ProgressDialog progressDialog;
+    private int width, height;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +88,8 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
+        height = displayMetrics.heightPixels;
+        width = displayMetrics.widthPixels;
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,6 +100,32 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
             }
         });
 
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        TextView movieName = headerView.findViewById(R.id.nav_view_title);
+        CircleImageView circleImageView = headerView.findViewById(R.id.nav_view_poster);
+        ImageView backdrop = headerView.findViewById(R.id.posterBackground);
+
+        final LastPlayed lastPlayed = new LastPlayed(this);
+        if(lastPlayed.getVideoName()!=null){
+            movieName.setText(lastPlayed.getVideoName());
+            Glide.with(this).load(new Config().getImageBaseUrl() + lastPlayed.getPoster()).into(circleImageView);
+            Glide.with(this).load(new Config().getImageBaseUrl() + lastPlayed.getBackdrop()).into(backdrop);
+
+        }else{
+            movieName.setText("BioScope");
+        }
+        backdrop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MovieDetailsActivity.class);
+                intent.putExtra("movie_id", lastPlayed.getVideoID());
+                startActivity(intent);
+            }
+        });
+
+        GenreDialog genreDialog = new GenreDialog(this);
+        genreDialog.generateGenreDialog(width, height);
     }
 
     private void getTopRated(int i) {
@@ -228,7 +266,7 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
                 break;
 
             case R.id.nav_settings:
-                Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, SettingsActivity.class));
                 break;
 
             case R.id.now_Playing:
@@ -297,5 +335,6 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
 
         finish();
     }
+
 
 }
