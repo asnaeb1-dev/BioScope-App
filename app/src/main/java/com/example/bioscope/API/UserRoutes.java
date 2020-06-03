@@ -2,6 +2,8 @@ package com.example.bioscope.API;
 
 import com.example.bioscope.POJO.CinemaPOJO;
 import com.example.bioscope.POJO.LogoutPOJO;
+import com.example.bioscope.POJO.OTPojo;
+import com.example.bioscope.POJO.Subclass.GenreChoice;
 import com.example.bioscope.POJO.Subclass.MovieArray;
 import com.example.bioscope.POJO.UserPOJO;
 import com.example.bioscope.POJO.UserSignUp;
@@ -40,4 +42,10 @@ public interface UserRoutes {
 
     @POST("/user/watchnow")
     Call<List<MovieArray>> pushMovieWatched(@Body MovieArray movieArray, @Header("Authorization") String token);
+
+    @POST("/user/sendcode")
+    Call<OTPojo> sendOTP(@Body OTPojo otPojo);
+
+    @POST("/user/insertgenres")
+    Call<List<GenreChoice>> insertGenres(@Body List<GenreChoice> genreChoice, @Header("Authorization") String token);
 }

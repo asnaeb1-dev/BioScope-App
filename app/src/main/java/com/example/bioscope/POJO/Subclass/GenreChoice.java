@@ -10,6 +10,9 @@ public class GenreChoice {
     @SerializedName("genre")
     @Expose
     private String genre;
+    @SerializedName("genre_id")
+    @Expose
+    private Integer genreId;
 
     public String getId() {
         return id;
@@ -25,6 +28,14 @@ public class GenreChoice {
 
     public void setGenre(String genre) {
         this.genre = genre;
+    }
+
+    public Integer getGenreId() {
+        return genreId;
+    }
+
+    public void setGenreId(Integer genreId) {
+        this.genreId = genreId;
     }
 
 }

@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,9 +19,23 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bioscope.API.UserRoutes;
+import com.example.bioscope.MainUserActivity;
+import com.example.bioscope.POJO.Subclass.GenreChoice;
+import com.example.bioscope.POJO.UserSignUp;
 import com.example.bioscope.R;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class GenreSelectorRV extends RecyclerView.Adapter<GenreSelectorRV.Viewholder>{
     private Context context;
@@ -69,7 +84,7 @@ public class GenreSelectorRV extends RecyclerView.Adapter<GenreSelectorRV.Viewho
                 }else{
                     holder.poster.setAlpha(1f);
                     holder.selector.setVisibility(View.GONE);
-                    selected.remove(selected.get(holder.getAdapterPosition()));
+                    selected.remove(values.get(holder.getAdapterPosition()));
                 }
             }
         });
@@ -139,11 +154,45 @@ public class GenreSelectorRV extends RecyclerView.Adapter<GenreSelectorRV.Viewho
     BroadcastReceiver broadcastReceiver =  new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            for (int i = 0;i< selected.size();i++){
-                Log.i("selected_________", String.valueOf(selected.get(i)));
-            }
+            sendGenres();
         }
     };
+
+    private void sendGenres(){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Config.getBaseUrl())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        UserRoutes admin = retrofit.create(UserRoutes.class);
+        List<GenreChoice> gc = new ArrayList<>();
+        for(int i = 0;i< selected.size();i++){
+            GenreChoice genreChoice = new GenreChoice();
+            genreChoice.setGenre(genres.get(values.indexOf(selected.get(i))));
+            genreChoice.setGenreId(selected.get(i));
+            gc.add(genreChoice);
+        }
+        Call<List<GenreChoice>> call = admin.insertGenres(gc, context.getSharedPreferences("MY_PREFS",MODE_PRIVATE).getString("USER_TOKEN", null));
+        call.enqueue(new Callback<List<GenreChoice>>() {
+            @Override
+            public void onResponse(Call<List<GenreChoice>> call, Response<List<GenreChoice>> response) {
+                if(response.isSuccessful()){
+                    assert response.body()!=null;
+                    if(response.body().size()>0){
+                        Toast.makeText(context, "Done! Watch away!", Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    Toast.makeText(context, "Sorry! Something went wrong. Try again later", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<GenreChoice>> call, Throwable t) {
+                Toast.makeText(context, "Sorry! Something went wrong. Try again later", Toast.LENGTH_SHORT).show();
+                Log.e("ERROR", t.getMessage());
+            }
+        });
+    }
 
 
     public class Viewholder extends RecyclerView.ViewHolder

@@ -1,8 +1,11 @@
 package com.example.bioscope;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -75,6 +78,17 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
         topRatedLL = findViewById(R.id.topRatedLL);
         navigationView.setNavigationItemSelectedListener(this);
 
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        height = displayMetrics.heightPixels;
+        width = displayMetrics.widthPixels;
+
+
+        if (getIntent().getIntExtra("callsc", 0) == 1) {
+            GenreDialog genreDialog = new GenreDialog(this);
+            genreDialog.generateGenreDialog(width, height);
+        }
+
         progressDialog = ProgressDialog.show(this, getResources().getString(R.string.app_name), "Loading. Please wait...", true);
         progressDialog.show();
 
@@ -86,10 +100,7 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
     protected void onStart() {
         super.onStart();
 
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        height = displayMetrics.heightPixels;
-        width = displayMetrics.widthPixels;
+
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,8 +135,6 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
             }
         });
 
-        GenreDialog genreDialog = new GenreDialog(this);
-        genreDialog.generateGenreDialog(width, height);
     }
 
     private void getTopRated(int i) {

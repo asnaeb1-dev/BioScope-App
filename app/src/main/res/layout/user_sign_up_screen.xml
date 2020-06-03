@@ -45,62 +45,84 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.776" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:textColorHint="@android:color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout4">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/emailETUserSignUp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="Email"
-            android:inputType="textEmailAddress" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="160dp"
-        android:textColorHint="@android:color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/usernameETUserSignUp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="Username" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColorHint="@android:color/white"
+        android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/userSignUpFAB"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
-        app:layout_constraintVertical_bias="0.244">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.715">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/passwordETUserSignUp"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout"
             android:layout_width="match_parent"
-            android:inputType="textPassword"
-            android:layout_height="match_parent"
-            android:hint="Password">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:textColorHint="@android:color/white"
+            app:layout_constraintBottom_toTopOf="@+id/textInputLayout5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout4"
+            app:layout_constraintVertical_bias="0.059">
 
-        </com.google.android.material.textfield.TextInputEditText>
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/emailETUserSignUp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Email"
+                android:inputType="textEmailAddress" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:textColorHint="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView5">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/usernameETUserSignUp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Username" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+
+            android:textColorHint="@android:color/white"
+            app:layout_constraintBottom_toTopOf="@+id/userSignUpFAB"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout4"
+            app:layout_constraintVertical_bias="1.0">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/passwordETUserSignUp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Password"
+                android:inputType="textPassword">
+
+            </com.google.android.material.textfield.TextInputEditText>
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textView4"

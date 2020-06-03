@@ -50,7 +50,7 @@ public class UserLoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_login);
 
         if(getSharedPreferences("MY_PREFS",MODE_PRIVATE).getString("USER_TOKEN", null)!=null){
-            startActivity(new Intent(this, MainUserActivity.class));
+            startActivity(new Intent(this, MainUserActivity.class).putExtra("callsc", 0));
             finish();
         }
 
@@ -78,6 +78,7 @@ public class UserLoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        signUPPB.setVisibility(View.GONE);
         sharedPreferences = getSharedPreferences("MY_PREFS", MODE_PRIVATE);
         Glide.with(this).asGif().load(getResources().getString(R.string.gif)).into(userLoginBack);
         signupFAB.setOnClickListener(new View.OnClickListener() {
@@ -176,7 +177,7 @@ public class UserLoginActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("USER_TOKEN", response.body().getToken());
                     editor.apply();
-                    startActivity(new Intent(getApplicationContext(), MainUserActivity.class));
+                    startActivity(new Intent(getApplicationContext(), MainUserActivity.class).putExtra("callsc", 0));
                     finish();
                 }else{
                     Snackbar.make(houserLayoutUser, "Incorrect email or password.", Snackbar.LENGTH_SHORT).show();
@@ -217,38 +218,7 @@ public class UserLoginActivity extends AppCompatActivity {
     }
 
     private void createUser(String username, String email, String password){
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Config.getBaseUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        UserRoutes user = retrofit.create(UserRoutes.class);
-        UserSignUp userSignUp = new UserSignUp(username, email, password);
-        Call<UserSignUp> call = user.createUser(userSignUp);
-        call.enqueue(new Callback<UserSignUp>() {
-            @Override
-            public void onResponse(Call<UserSignUp> call, Response<UserSignUp> response) {
-                if(response.isSuccessful()){
-                    assert response.body()!=null;
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("USER_TOKEN", response.body().getToken());
-                    editor.apply();
-                    startActivity(new Intent(getApplicationContext(), MainUserActivity.class));
-                    finish();
-                }else{
-                    Snackbar.make(houserLayoutUser, getResources().getString(R.string.email_exists_message), Snackbar.LENGTH_SHORT).show();
-                }
-                signUPPB.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onFailure(Call<UserSignUp> call, Throwable t) {
-                Log.e("ERROR", t.getMessage());
-                signUPPB.setVisibility(View.GONE);
-                Snackbar.make(houserLayoutUser, "Something went wrong. Try again", Snackbar.LENGTH_SHORT).show();
-            }
-        });
-
+        startActivity(new Intent(this, OTPCheckerActivity.class).putExtra("_email_", email).putExtra("_password_", password).putExtra("_username_", username));
     }
 
     @Override
