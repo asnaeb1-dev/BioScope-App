@@ -15,8 +15,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".OTPCheckerActivity"></activity>
-        <activity android:name=".SettingsActivity" />
+        <activity
+            android:name=".SettingActivity"
+            android:label="@string/title_activity_setting"/>
+        <activity android:name=".OTPCheckerActivity" />
         <activity android:name=".AboutActivity" />
         <activity android:name=".ProfileActivity" />
         <activity

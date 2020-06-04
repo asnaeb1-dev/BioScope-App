@@ -12,6 +12,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -48,4 +49,7 @@ public interface UserRoutes {
 
     @POST("/user/insertgenres")
     Call<List<GenreChoice>> insertGenres(@Body List<GenreChoice> genreChoice, @Header("Authorization") String token);
+
+    @DELETE("/user/delete")
+    Call<UserPOJO> removeUser(@Header("Authorization") String token);
 }

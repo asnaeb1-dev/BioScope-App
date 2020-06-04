@@ -275,7 +275,7 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
                 break;
 
             case R.id.nav_settings:
-                startActivity(new Intent(this, SettingsActivity.class));
+                startActivity(new Intent(this, SettingActivity.class));
                 break;
 
             case R.id.now_Playing:

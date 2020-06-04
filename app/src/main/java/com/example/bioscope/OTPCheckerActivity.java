@@ -82,6 +82,7 @@ public class OTPCheckerActivity extends AppCompatActivity {
         resendOTP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                countDownTimer.cancel();
                 startTimer();
                 sendOTP(email);
             }

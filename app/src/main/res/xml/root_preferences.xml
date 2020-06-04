@@ -1,0 +1,78 @@
+<PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="Appearance">
+
+        <Preference
+            app:key="colorChanger"
+            app:title="Color"
+            app:summary="Change the color of the application"
+            app:icon="@drawable/googleg_standard_color_18"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="User">
+
+        <Preference
+            app:key="profilePicture"
+            app:summary="Set profile picture"
+            app:title="Profile picture"
+            app:icon="@drawable/ic_person_white_24dp"
+            app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            app:key="genre"
+            app:icon="@drawable/ic_baseline_album_24"
+            app:summary="Reselect new genres"
+            app:title="Reselect genre"
+            app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            app:key="watchedmovie"
+            app:icon="@drawable/ic_baseline_movie_24"
+            app:title="Remove watched movies"
+            app:summary="Delete all the movies you have watched"
+            app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            app:key="update"
+            app:icon="@drawable/ic_person_white_24dp"
+            app:title="Update profile"
+            app:summary="Update your account details"
+            app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            app:key="security"
+            app:icon="@drawable/ic_baseline_security_24"
+            app:title="Change password"
+            app:summary="Change your password "
+            app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            app:key="deletepermanent"
+            app:icon="@drawable/ic_baseline_delete_forever_24"
+            app:title="Deactivate account"
+            app:summary="Completely remove your account and all its contents"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="BioScope">
+
+        <Preference
+            app:key="about_app"
+            app:title="About"
+            app:singleLineTitle="true"
+            app:icon="@drawable/ic_baseline_info_24"
+            app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            app:key="about_developers"
+            app:title="Developers"
+            app:singleLineTitle="true"
+            app:icon="@drawable/ic_group_black_24dp"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
