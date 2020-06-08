@@ -52,4 +52,10 @@ public interface UserRoutes {
 
     @DELETE("/user/delete")
     Call<UserPOJO> removeUser(@Header("Authorization") String token);
+
+    @GET("/movie/category")
+    Call<List<CinemaPOJO>> getMoviesByCategory(@Query("category") String c, @Header("Authorization") String token);
+
+    @GET("/movie/industry")
+    Call<List<CinemaPOJO>> getMoviesByIndustry(@Query("i") String industry, @Header("Authorization") String token);
 }

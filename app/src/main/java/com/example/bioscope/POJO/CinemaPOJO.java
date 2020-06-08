@@ -55,9 +55,18 @@ public class CinemaPOJO {
     @SerializedName("url")
     @Expose
     private String url;
+    @SerializedName("category")
+    @Expose
+    private String category;
+    @SerializedName("industry")
+    @Expose
+    private String industry;
     @SerializedName("genres_array")
     @Expose
     private List<GenresArray> genresArray = null;
+
+
+
     @SerializedName("recommendation")
     @Expose
     private List<Recommendation> recommendation = null;
@@ -221,6 +230,22 @@ public class CinemaPOJO {
 
     public void setV(Integer v) {
         this.v = v;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getIndustry() {
+        return industry;
+    }
+
+    public void setIndustry(String industry) {
+        this.industry = industry;
     }
 }
 

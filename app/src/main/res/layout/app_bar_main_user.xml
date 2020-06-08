@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:background="@color/primary"
+    android:id="@+id/mainUserLL"
     android:layout_height="match_parent"
     tools:context=".MainUserActivity">
 
@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/raleway_medium"
-            android:text="Now Playing"
+            android:text="Movies"
             android:textColor="@android:color/white"
             android:textSize="25sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -47,17 +47,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-            <TextView
-                android:text="Watch now"
-                android:textSize="18sp"
-                android:gravity="center"
-                android:fontFamily="@font/raleway_medium"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
             <ScrollView
                 android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
@@ -67,23 +56,8 @@
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-
-                    <HorizontalScrollView
-                        android:layout_margin="20dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="300dp">
-
-                        <LinearLayout
-                            android:id="@+id/watchNowLL"
-                            android:orientation="horizontal"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent">
-
-                        </LinearLayout>
-                    </HorizontalScrollView>
-
                     <TextView
-                        android:text="Top Rated"
+                        android:text="Superhero"
                         android:layout_margin="20dp"
                         android:textSize="18sp"
                         android:gravity="center"
@@ -96,7 +70,81 @@
                         android:layout_height="300dp">
 
                         <LinearLayout
-                            android:id="@+id/topRatedLL"
+                            android:id="@+id/superheroLL"
+                            android:orientation="horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent">
+
+                        </LinearLayout>
+
+                    </HorizontalScrollView>
+
+                    <TextView
+                        android:layout_margin="20dp"
+                        android:textSize="18sp"
+                        android:text="Action/Thriller"
+                        android:gravity="center"
+                        android:fontFamily="@font/raleway_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <HorizontalScrollView
+                        android:layout_margin="20dp"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="300dp">
+
+                        <LinearLayout
+                            android:id="@+id/actionMoviesLL"
+                            android:orientation="horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent">
+
+                        </LinearLayout>
+
+                    </HorizontalScrollView>
+
+                    <TextView
+                        android:layout_margin="20dp"
+                        android:textSize="18sp"
+                        android:text="Comedy/Animation"
+                        android:gravity="center"
+                        android:fontFamily="@font/raleway_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <HorizontalScrollView
+                        android:layout_margin="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="300dp">
+
+                        <LinearLayout
+                            android:id="@+id/comedyMoviesLL"
+                            android:orientation="horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent">
+
+                        </LinearLayout>
+
+                    </HorizontalScrollView>
+
+                    <TextView
+                        android:layout_margin="20dp"
+
+                        android:textSize="18sp"
+                        android:text="Horror"
+                        android:gravity="center"
+                        android:fontFamily="@font/raleway_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <HorizontalScrollView
+                        android:layout_margin="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="300dp">
+
+                        <LinearLayout
+                            android:id="@+id/horrorMoviesLL"
                             android:orientation="horizontal"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent">
@@ -104,6 +152,105 @@
                         </LinearLayout>
                     </HorizontalScrollView>
 
+                    <TextView
+                        android:layout_margin="20dp"
+                        android:textSize="18sp"
+                        android:text="Crime/Drama"
+                        android:gravity="center"
+                        android:fontFamily="@font/raleway_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <HorizontalScrollView
+                        android:layout_margin="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="300dp">
+
+                        <LinearLayout
+                            android:id="@+id/crimeMoviesLL"
+                            android:orientation="horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent">
+
+                        </LinearLayout>
+                    </HorizontalScrollView>
+
+                    <TextView
+                        android:layout_margin="20dp"
+                        android:textSize="18sp"
+                        android:text="Romance"
+                        android:gravity="center"
+                        android:fontFamily="@font/raleway_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <HorizontalScrollView
+                        android:layout_margin="20dp"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="300dp">
+
+                        <LinearLayout
+                            android:id="@+id/romanceMoviesLL"
+                            android:orientation="horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent">
+
+                        </LinearLayout>
+
+                    </HorizontalScrollView>
+
+
+                    <TextView
+                        android:layout_margin="20dp"
+                        android:textSize="18sp"
+                        android:text="Bollywood"
+                        android:gravity="center"
+                        android:fontFamily="@font/raleway_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <HorizontalScrollView
+                        android:layout_margin="20dp"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="300dp">
+
+                        <LinearLayout
+                            android:id="@+id/bollywoodMoviesLL"
+                            android:orientation="horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent">
+
+                        </LinearLayout>
+
+                    </HorizontalScrollView>
+
+                    <TextView
+                        android:layout_margin="20dp"
+
+                        android:textSize="18sp"
+                        android:text="Hollywood"
+                        android:gravity="center"
+                        android:fontFamily="@font/raleway_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <HorizontalScrollView
+                        android:layout_margin="20dp"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="300dp">
+
+                        <LinearLayout
+                            android:id="@+id/hollywoodMoviesLL"
+                            android:orientation="horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent">
+
+                        </LinearLayout>
+
+                    </HorizontalScrollView>
                 </LinearLayout>
             </ScrollView>
     </LinearLayout>

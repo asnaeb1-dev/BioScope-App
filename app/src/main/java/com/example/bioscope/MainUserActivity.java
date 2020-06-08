@@ -12,6 +12,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
@@ -38,6 +40,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
+import androidx.cardview.widget.CardView;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.core.view.GravityCompat;
@@ -62,7 +65,7 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
     private DrawerLayout drawer;
     private NavigationView navigationView;
     private ImageView refreshButton;
-    private LinearLayout watchNowLL, topRatedLL;
+    private LinearLayout superHeroLL, mainUserLL, actionLL, comedyLL, horrorLL, hollywoodLL, bollywoodLL, crimeLL, romanceLL;
     private ProgressDialog progressDialog;
     private int width, height;
 
@@ -74,8 +77,17 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         refreshButton = findViewById(R.id.refresh);
-        watchNowLL = findViewById(R.id.watchNowLL);
-        topRatedLL = findViewById(R.id.topRatedLL);
+
+        actionLL = findViewById(R.id.actionMoviesLL);
+        superHeroLL = findViewById(R.id.superheroLL);
+        comedyLL = findViewById(R.id.comedyMoviesLL);
+        horrorLL = findViewById(R.id.horrorMoviesLL);
+        crimeLL = findViewById(R.id.crimeMoviesLL);
+        hollywoodLL = findViewById(R.id.hollywoodMoviesLL);
+        bollywoodLL = findViewById(R.id.bollywoodMoviesLL);
+        romanceLL = findViewById(R.id.romanceMoviesLL);
+
+        mainUserLL = findViewById(R.id.mainUserLL);
         navigationView.setNavigationItemSelectedListener(this);
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -92,22 +104,35 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
         progressDialog = ProgressDialog.show(this, getResources().getString(R.string.app_name), "Loading. Please wait...", true);
         progressDialog.show();
 
-        getWatchNow();
-        getTopRated(7);
+        getMoviesByCategory("superhero");
+        getMoviesByCategory("action");
+        getMoviesByCategory("comedy");
+        getMoviesByCategory("horror");
+        getMoviesByCategory("crime");
+        getMoviesByCategory("romance");
+        getMoviesByIndustry("hollywood");
+        getMoviesByIndustry("bollywood");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 progressDialog = ProgressDialog.show(MainUserActivity.this, getResources().getString(R.string.app_name), "Loading. Please wait...", true);
                 progressDialog.show();
-                getWatchNow();
-                getTopRated(7);
+
+                getMoviesByCategory("superhero");
+                getMoviesByCategory("action");
+                getMoviesByCategory("comedy");
+                getMoviesByCategory("horror");
+                getMoviesByCategory("crime");
+                getMoviesByCategory("romance");
+                getMoviesByIndustry("hollywood");
+                getMoviesByIndustry("bollywood");
+
             }
         });
 
@@ -137,22 +162,29 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
 
     }
 
-    private void getTopRated(int i) {
+    private void getMoviesByIndustry(final String industry) {
         UserRoutes user = initializeRetrofit(Config.getBaseUrl()).create(UserRoutes.class);
-        Call<List<CinemaPOJO>> call = user.getMoviesByRating(i, getSharedPreferences("MY_PREFS", MODE_PRIVATE).getString("USER_TOKEN", null));
+        Call<List<CinemaPOJO>> call = user.getMoviesByIndustry(industry ,getSharedPreferences("MY_PREFS", MODE_PRIVATE).getString("USER_TOKEN", null));
         call.enqueue(new Callback<List<CinemaPOJO>>() {
             @Override
             public void onResponse(Call<List<CinemaPOJO>> call, Response<List<CinemaPOJO>> response) {
                 if(response.isSuccessful()){
                     assert response.body()!=null;
                     List<CinemaPOJO> list = response.body();
-                    topRatedLL.removeAllViews();
-                    for(CinemaPOJO cinema : list){
-                        if(cinema.getPosters().get(0).getPosterPath()!=null){
-                            populateRatingList(cinema.getPosters().get(0).getPosterPath(), cinema.getId());
-                        }
+
+                    switch (industry){
+
+                        case "hollywood":
+                            populateList(hollywoodLL, list, "industry", "hollywood");
+                            break;
+
+                        case "bollywood":
+                            populateList(bollywoodLL, list, "industry", "bollywood");
+                            break;
+
+                        default:
+                            break;
                     }
-                    progressDialog.dismiss();
                 }
             }
 
@@ -163,58 +195,45 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
             }
         });
 
-    }
-
-    private void populateRatingList(String posterPath, final String id) {
-        final ImageView imageView = new ImageView(this);
-        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-        imageView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        imageView.setPadding(10, 10, 10, 10);
-        Glide.with(this)
-                .asBitmap()
-                .load(new Config().getImageBaseUrl() + posterPath)
-                .into(new CustomTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(getResources(),resource);
-                        dr.setCornerRadius(20);
-                        imageView.setImageDrawable(dr);
-                    }
-
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
-                    }
-                });
-        topRatedLL.addView(imageView);
-
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MovieDetailsActivity.class);
-                intent.putExtra("movie_id", id);
-                startActivity(intent);
-            }
-        });
     }
 
     private Retrofit initializeRetrofit(String url){
         return new Retrofit.Builder().baseUrl(url).addConverterFactory(GsonConverterFactory.create()).build();
     }
 
-    private void getWatchNow(){
+    private void getMoviesByCategory(final String category){
         UserRoutes user = initializeRetrofit(Config.getBaseUrl()).create(UserRoutes.class);
-        Call<List<CinemaPOJO>> call = user.getMovies(getSharedPreferences("MY_PREFS", MODE_PRIVATE).getString("USER_TOKEN", null));
+        Call<List<CinemaPOJO>> call = user.getMoviesByCategory(category ,getSharedPreferences("MY_PREFS", MODE_PRIVATE).getString("USER_TOKEN", null));
         call.enqueue(new Callback<List<CinemaPOJO>>() {
             @Override
             public void onResponse(Call<List<CinemaPOJO>> call, Response<List<CinemaPOJO>> response) {
                 if(response.isSuccessful()){
                     assert response.body()!=null;
                     List<CinemaPOJO> list = response.body();
-                    watchNowLL.removeAllViews();
-                    for(CinemaPOJO cinema : list){
-                        if(cinema.getPosters().get(0).getPosterPath()!=null){
-                            populateWatchNow(cinema.getPosters().get(0).getPosterPath(), cinema.getId());
-                        }
+
+                    switch (category){
+                        case "superhero":
+                            populateList(superHeroLL, list, "category", category);
+                            break;
+
+                        case "action":
+                            populateList(actionLL, list, "category", category);
+                            break;
+
+                        case "horror":
+                            populateList(horrorLL, list, "category", category);
+                            break;
+
+                        case "comedy":
+                            populateList(comedyLL, list, "category", category);
+                            break;
+
+                        case "crime":
+                            populateList(crimeLL, list, "category", category);
+                            break;
+
+                        default:
+                            break;
                     }
                 }
             }
@@ -227,35 +246,59 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
         });
     }
 
-    private void populateWatchNow(String path, final String id){
-        final ImageView imageView = new ImageView(this);
-        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-        imageView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        imageView.setPadding(10, 10, 10, 10);
-        Glide.with(this)
-                .asBitmap()
-                .load(new Config().getImageBaseUrl() + path)
-                .into(new CustomTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(getResources(),resource);
-                        dr.setCornerRadius(20);
-                        imageView.setImageDrawable(dr);
-                    }
+    private void populateList(LinearLayout linearLayout, final List<CinemaPOJO> movieList, final String value, final String sender){
+        linearLayout.removeAllViews();
+        for(final CinemaPOJO cinema : movieList){
+            final ImageView imageView = new ImageView(this);
+            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+            imageView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            imageView.setPadding(10, 10, 10, 10);
 
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
-                    }
-                });
-        watchNowLL.addView(imageView);
-        imageView.setOnClickListener(new View.OnClickListener() {
+            if(cinema.getPosters().get(0).getPosterPath()!=null){
+                Glide.with(this)
+                        .asBitmap()
+                        .load(new Config().getImageBaseUrl() + cinema.getPosters().get(0).getPosterPath())
+                        .into(new CustomTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(getResources(),resource);
+                                dr.setCornerRadius(20);
+                                imageView.setImageDrawable(dr);
+                            }
+
+                            @Override
+                            public void onLoadCleared(@Nullable Drawable placeholder) {
+                            }
+                        });
+            }else{
+                imageView.setImageDrawable(getResources().getDrawable(R.mipmap.ic_launcher_bioscope_round));
+            }
+            linearLayout.addView(imageView);
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), MovieDetailsActivity.class);
+                    intent.putExtra("movie_id", cinema.getId());
+                    startActivity(intent);
+                }
+            });
+        }
+
+        View view = this.getLayoutInflater().inflate(R.layout.next_button, null);
+        CardView cardView = view.findViewById(R.id.clicker_card);
+
+        cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MovieDetailsActivity.class);
-                intent.putExtra("movie_id", id);
+                Intent intent = new Intent(MainUserActivity.this, MovieListerActivity.class);
+                intent.putExtra("callSc", 0);
+                intent.putExtra("_title_", sender);
                 startActivity(intent);
             }
         });
+
+        linearLayout.addView(view);
+        progressDialog.dismiss();
     }
 
     @Override
@@ -280,10 +323,6 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
 
             case R.id.now_Playing:
                 Toast.makeText(this, "Slideshow", Toast.LENGTH_SHORT).show();
-                break;
-
-            case R.id.nav_about:
-                startActivity(new Intent(MainUserActivity.this, AboutActivity.class));
                 break;
 
             case R.id.nav_logout:
@@ -344,6 +383,4 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
 
         finish();
     }
-
-
 }
