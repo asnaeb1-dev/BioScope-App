@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/primary"
     android:orientation="vertical"
     android:id="@+id/mainUserLL"
     android:layout_height="match_parent"
@@ -58,7 +59,7 @@
                     android:layout_height="wrap_content">
                     <TextView
                         android:text="Superhero"
-                        android:layout_margin="20dp"
+                        android:layout_margin="10dp"
                         android:textSize="18sp"
                         android:gravity="center"
                         android:fontFamily="@font/raleway_medium"
@@ -80,9 +81,9 @@
                     </HorizontalScrollView>
 
                     <TextView
-                        android:layout_margin="20dp"
+                        android:layout_margin="10dp"
                         android:textSize="18sp"
-                        android:text="Action/Thriller"
+                        android:text="Action/Thriller/Sci-fi"
                         android:gravity="center"
                         android:fontFamily="@font/raleway_medium"
                         android:layout_width="match_parent"
@@ -105,7 +106,7 @@
                     </HorizontalScrollView>
 
                     <TextView
-                        android:layout_margin="20dp"
+                        android:layout_margin="10dp"
                         android:textSize="18sp"
                         android:text="Comedy/Animation"
                         android:gravity="center"
@@ -153,7 +154,7 @@
                     </HorizontalScrollView>
 
                     <TextView
-                        android:layout_margin="20dp"
+                        android:layout_margin="10dp"
                         android:textSize="18sp"
                         android:text="Crime/Drama"
                         android:gravity="center"
@@ -176,7 +177,7 @@
                     </HorizontalScrollView>
 
                     <TextView
-                        android:layout_margin="20dp"
+                        android:layout_margin="10dp"
                         android:textSize="18sp"
                         android:text="Romance"
                         android:gravity="center"
@@ -202,7 +203,7 @@
 
 
                     <TextView
-                        android:layout_margin="20dp"
+                        android:layout_margin="10dp"
                         android:textSize="18sp"
                         android:text="Bollywood"
                         android:gravity="center"
@@ -227,7 +228,7 @@
                     </HorizontalScrollView>
 
                     <TextView
-                        android:layout_margin="20dp"
+                        android:layout_margin="10dp"
 
                         android:textSize="18sp"
                         android:text="Hollywood"

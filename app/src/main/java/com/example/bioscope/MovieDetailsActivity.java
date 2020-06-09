@@ -206,6 +206,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         //set recommendation
         for(Recommendation recommendation: cinemaPOJO.getRecommendation()){
             final ImageView imageView = new ImageView(this);
+            imageView.setLayoutParams(new LinearLayout.LayoutParams(300, 450));
             imageView.setPadding(10, 5, 10, 5);
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             Glide.with(this)

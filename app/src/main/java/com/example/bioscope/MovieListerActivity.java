@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -34,6 +35,7 @@ public class MovieListerActivity extends AppCompatActivity {
 
     private String category;
     private int callSc, height, width;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,8 @@ public class MovieListerActivity extends AppCompatActivity {
             }
         });
         category = getIntent().getStringExtra("_title_");
+        title.setText(category);
+        progressDialog = ProgressDialog.show(MovieListerActivity.this,"", "Loading. Please wait...", true);
         if(getIntent().getIntExtra("callSc", 0) == 0){
             getAllDataByCategory(category);
         }else{
@@ -75,7 +79,7 @@ public class MovieListerActivity extends AppCompatActivity {
 
     private void getAllDataByIndustry(String toolbarTitle) {
         UserRoutes user = initializeRetrofit(Config.getBaseUrl()).create(UserRoutes.class);
-        Call<List<CinemaPOJO>> call = user.getMoviesByCategory(toolbarTitle ,getSharedPreferences("MY_PREFS", MODE_PRIVATE).getString("USER_TOKEN", null));
+        Call<List<CinemaPOJO>> call = user.getMoviesByIndustry(toolbarTitle ,getSharedPreferences("MY_PREFS", MODE_PRIVATE).getString("USER_TOKEN", null));
         call.enqueue(new Callback<List<CinemaPOJO>>() {
             @Override
             public void onResponse(Call<List<CinemaPOJO>> call, Response<List<CinemaPOJO>> response) {
@@ -84,6 +88,9 @@ public class MovieListerActivity extends AppCompatActivity {
                     List<CinemaPOJO> list = response.body();
                     recyclerView.setAdapter(new MovieListerRVAdapter(MovieListerActivity.this, list, height, width));
                     recyclerView.setLayoutManager(new GridLayoutManager(MovieListerActivity.this, 3));
+                    progressDialog.dismiss();
+                }else{
+                    progressDialog.dismiss();
                 }
             }
 
@@ -105,6 +112,10 @@ public class MovieListerActivity extends AppCompatActivity {
                     List<CinemaPOJO> list = response.body();
                     recyclerView.setAdapter(new MovieListerRVAdapter(MovieListerActivity.this, list, height, width));
                     recyclerView.setLayoutManager(new GridLayoutManager(MovieListerActivity.this, 3));
+                    progressDialog.dismiss();
+                }else {
+                    progressDialog.dismiss();
+                    Toast.makeText(MovieListerActivity.this, "Failed to fetch data. Please try again.", Toast.LENGTH_SHORT).show();
                 }
             }
 

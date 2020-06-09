@@ -1,5 +1,6 @@
 package com.example.bioscope.API;
 
+import com.example.bioscope.POJO.ChangePassPOJO;
 import com.example.bioscope.POJO.CinemaPOJO;
 import com.example.bioscope.POJO.LogoutPOJO;
 import com.example.bioscope.POJO.OTPojo;
@@ -58,4 +59,7 @@ public interface UserRoutes {
 
     @GET("/movie/industry")
     Call<List<CinemaPOJO>> getMoviesByIndustry(@Query("i") String industry, @Header("Authorization") String token);
+
+    @POST("/user/changepassword")
+    Call<UserPOJO> changePassword(@Body ChangePassPOJO changePassPOJO, @Header("Authorization") String token);
 }

@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import com.example.bioscope.DialogBox.ChangePasswordDialog;
 import com.example.bioscope.DialogBox.ColorSelectorDialog;
 import com.example.bioscope.DialogBox.GenreDialog;
 import com.example.bioscope.DialogBox.RemoveAccountDialog;
@@ -43,18 +44,16 @@ public class SettingActivity extends AppCompatActivity {
 
     public static class SettingsFragment extends PreferenceFragmentCompat {
 
-        private Preference colorChanger, profilePictureChanger, genreSelector, deleteAccount, aboutDevs;
+        private Preference genreSelector, deleteAccount, aboutDevs, security;
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
 
-            colorChanger = (Preference) findPreference("colorChanger");
-            profilePictureChanger = (Preference) findPreference("profilePicture");
             genreSelector = findPreference("genre");
             deleteAccount = findPreference("deletepermanent");
             aboutDevs = findPreference("about_developers");
-
+            security = findPreference("security");
 
             startFunctioning();
         }
@@ -69,15 +68,6 @@ public class SettingActivity extends AppCompatActivity {
                 }
             });
 
-            colorChanger.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    ColorSelectorDialog colorSelectorDialog = new ColorSelectorDialog(getContext());
-                    colorSelectorDialog.generateColorSelectorDialog();
-
-                    return true;
-                }
-            });
 
             //display the genre change dialog so that user can change his genre specs again
             genreSelector.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -97,6 +87,14 @@ public class SettingActivity extends AppCompatActivity {
                     RemoveAccountDialog removeAccount = new RemoveAccountDialog(getContext());
                     removeAccount.generateConfirmationDialog();
                     return true;
+                }
+            });
+
+            security.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    new ChangePasswordDialog(getContext()).showChangePasswordDialog();
+                    return false;
                 }
             });
         }

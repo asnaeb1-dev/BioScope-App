@@ -42,7 +42,6 @@ public class UserLoginActivity extends AppCompatActivity {
     private ProgressBar signUPPB, loginPB;
     private ConstraintLayout houserLayoutUser;
     private SharedPreferences sharedPreferences;
-    private ImageView userLoginBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +53,6 @@ public class UserLoginActivity extends AppCompatActivity {
             finish();
         }
 
-        userLoginBack = findViewById(R.id.userLoginBack);
         houserLayoutUser = findViewById(R.id.house_Layout_user);
         slidingUpPanelLayout = findViewById(R.id.userPanel);
         //sign up
@@ -80,7 +78,6 @@ public class UserLoginActivity extends AppCompatActivity {
 
         signUPPB.setVisibility(View.GONE);
         sharedPreferences = getSharedPreferences("MY_PREFS", MODE_PRIVATE);
-        Glide.with(this).asGif().load(getResources().getString(R.string.gif)).into(userLoginBack);
         signupFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -182,13 +179,13 @@ public class UserLoginActivity extends AppCompatActivity {
                 }else{
                     Snackbar.make(houserLayoutUser, "Incorrect email or password.", Snackbar.LENGTH_SHORT).show();
                 }
-                signUPPB.setVisibility(View.GONE);
+                loginPB.setVisibility(View.GONE);
             }
 
             @Override
             public void onFailure(Call<UserSignUp> call, Throwable t) {
                 Log.e("ERROR", t.getMessage());
-                signUPPB.setVisibility(View.GONE);
+                loginPB.setVisibility(View.GONE);
                 Snackbar.make(houserLayoutUser, "Something went wrong. Try again", Snackbar.LENGTH_SHORT).show();
             }
         });

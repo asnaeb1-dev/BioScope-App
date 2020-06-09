@@ -121,6 +121,7 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                refreshButton.animate().rotation(360f).setDuration(1000);
                 progressDialog = ProgressDialog.show(MainUserActivity.this, getResources().getString(R.string.app_name), "Loading. Please wait...", true);
                 progressDialog.show();
 
@@ -232,6 +233,10 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
                             populateList(crimeLL, list, "category", category);
                             break;
 
+                        case "romance":
+                            populateList(romanceLL, list, "category", category);
+                            break;
+
                         default:
                             break;
                     }
@@ -291,8 +296,13 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainUserActivity.this, MovieListerActivity.class);
-                intent.putExtra("callSc", 0);
-                intent.putExtra("_title_", sender);
+                if(value.equals("category")){
+                    intent.putExtra("callSc", 0);
+                    intent.putExtra("_title_", sender);
+                }else{
+                    intent.putExtra("callSc", 1);
+                    intent.putExtra("_title_", sender);
+                }
                 startActivity(intent);
             }
         });

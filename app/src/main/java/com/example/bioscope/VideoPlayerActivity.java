@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -61,6 +62,9 @@ public class VideoPlayerActivity extends AppCompatActivity implements Player.Eve
         this.getWindow()
                 .setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                         WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        getWindow().addFlags((int)WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         setContentView(R.layout.activity_video_player);
 
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -86,6 +90,23 @@ public class VideoPlayerActivity extends AppCompatActivity implements Player.Eve
                 finish();
             }
         });
+
+        getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+            @Override
+            public void onSystemUiVisibilityChange(int visibility) {
+                if(visibility != View.SYSTEM_UI_FLAG_HIDE_NAVIGATION){
+                    new CountDownTimer(3000, 1000) {
+                        public void onTick(long millisUntilFinished) {
+                        }
+                        public void onFinish() {
+                            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+                            cancel();
+                        }
+                    }.start();
+                }
+            }
+        });
+
     }
 
     private void setUp() {
