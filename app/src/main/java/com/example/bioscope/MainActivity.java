@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void watchFunction(View view) {
         startActivity(new Intent(getApplicationContext(), UserLoginActivity.class));
-        finish();
     }
 
     public void adminFunction(View view) {

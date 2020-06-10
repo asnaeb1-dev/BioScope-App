@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -68,6 +69,7 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
     private LinearLayout superHeroLL, mainUserLL, actionLL, comedyLL, horrorLL, hollywoodLL, bollywoodLL, crimeLL, romanceLL;
     private ProgressDialog progressDialog;
     private int width, height;
+    private boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +123,7 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                refreshButton.animate().rotation(360f).setDuration(1000);
+                refreshButton.animate().rotation(360f).setDuration(2000);
                 progressDialog = ProgressDialog.show(MainUserActivity.this, getResources().getString(R.string.app_name), "Loading. Please wait...", true);
                 progressDialog.show();
 
@@ -165,7 +167,7 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
 
     private void getMoviesByIndustry(final String industry) {
         UserRoutes user = initializeRetrofit(Config.getBaseUrl()).create(UserRoutes.class);
-        Call<List<CinemaPOJO>> call = user.getMoviesByIndustry(industry ,getSharedPreferences("MY_PREFS", MODE_PRIVATE).getString("USER_TOKEN", null));
+        Call<List<CinemaPOJO>> call = user.getMoviesByIndustry(industry, 5 ,getSharedPreferences("MY_PREFS", MODE_PRIVATE).getString("USER_TOKEN", null));
         call.enqueue(new Callback<List<CinemaPOJO>>() {
             @Override
             public void onResponse(Call<List<CinemaPOJO>> call, Response<List<CinemaPOJO>> response) {
@@ -204,7 +206,7 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
 
     private void getMoviesByCategory(final String category){
         UserRoutes user = initializeRetrofit(Config.getBaseUrl()).create(UserRoutes.class);
-        Call<List<CinemaPOJO>> call = user.getMoviesByCategory(category ,getSharedPreferences("MY_PREFS", MODE_PRIVATE).getString("USER_TOKEN", null));
+        Call<List<CinemaPOJO>> call = user.getMoviesByCategory(category, 5 ,getSharedPreferences("MY_PREFS", MODE_PRIVATE).getString("USER_TOKEN", null));
         call.enqueue(new Callback<List<CinemaPOJO>>() {
             @Override
             public void onResponse(Call<List<CinemaPOJO>> call, Response<List<CinemaPOJO>> response) {
@@ -387,10 +389,23 @@ public class MainUserActivity extends AppCompatActivity implements NavigationVie
 
     }
 
+
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
 
-        finish();
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
     }
 }

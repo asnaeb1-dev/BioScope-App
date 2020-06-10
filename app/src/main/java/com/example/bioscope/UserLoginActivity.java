@@ -222,7 +222,6 @@ public class UserLoginActivity extends AppCompatActivity {
     public void onBackPressed() {
         if(slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED){
             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-            super.onBackPressed();
         }else{
             finish();
         }

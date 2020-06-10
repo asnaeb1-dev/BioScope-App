@@ -209,22 +209,24 @@ public class MovieDetailsActivity extends AppCompatActivity {
             imageView.setLayoutParams(new LinearLayout.LayoutParams(300, 450));
             imageView.setPadding(10, 5, 10, 5);
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-            Glide.with(this)
-                    .asBitmap()
-                    .load(recommendation.getMoviePosterData())
-                    .into(new CustomTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                            RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(getResources(),resource);
-                            dr.setCornerRadius(10);
-                            imageView.setImageDrawable(dr);
-                        }
+            if(recommendation.getMoviePosterData()!=null && !recommendation.getMoviePosterData().equals("N/A")){
+                Glide.with(this)
+                        .asBitmap()
+                        .load(recommendation.getMoviePosterData())
+                        .into(new CustomTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                RoundedBitmapDrawable dr = RoundedBitmapDrawableFactory.create(getResources(),resource);
+                                dr.setCornerRadius(10);
+                                imageView.setImageDrawable(dr);
+                            }
 
-                        @Override
-                        public void onLoadCleared(@Nullable Drawable placeholder) {
-                        }
-                    });
-            recommedationLL.addView(imageView);
+                            @Override
+                            public void onLoadCleared(@Nullable Drawable placeholder) {
+                            }
+                        });
+                recommedationLL.addView(imageView);
+            }
         }
 
         //set Genre
@@ -365,7 +367,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
             request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, uri.getLastPathSegment());
             downloadManager.enqueue(request);
-            Snackbar.make(constraintLayout, "Downloading "+ cinemaPOJO.getTitle(), Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(constraintLayout, "Downloading "+ cinemaPOJO.getTitle()+". Please see download manager.", Snackbar.LENGTH_LONG).show();
         }else{
             Snackbar.make(constraintLayout, "Sorry! Download link unavailable.", Snackbar.LENGTH_SHORT).show();
         }

@@ -2,7 +2,6 @@ package com.example.bioscope;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
@@ -46,7 +45,55 @@ public class MovieListerActivity extends AppCompatActivity {
         backButton = findViewById(R.id.movieListBackButton);
         title = findViewById(R.id.movieListName);
 
+        category = getIntent().getStringExtra("_title_");
+        setTitle(category);
+        progressDialog = ProgressDialog.show(MovieListerActivity.this,"", "Loading. Please wait...", true);
+        if(getIntent().getIntExtra("callSc", 0) == 0){
+            getAllDataByCategory(category);
+        }else{
+            getAllDataByIndustry(category);
+        }
     }
+
+    private void setTitle(String category){
+        switch(category) {
+            case "superhero":
+                title.setText("Marvel/DC");
+                break;
+
+            case "action":
+                title.setText("Action/Thriller/Sci-fi");
+                break;
+
+            case "crime":
+                title.setText("Crime/Drama");
+                break;
+
+            case "comedy":
+                title.setText("Comedy/Animation");
+                break;
+
+            case "horror":
+                title.setText("Horror");
+                break;
+
+            case "romance":
+                title.setText("Romance");
+                break;
+
+            case "hollywood":
+                title.setText("Hollywood");
+                break;
+
+            case "bollywood":
+                title.setText("Bollywood");
+                break;
+
+            default:
+                break;
+        }
+    }
+
 
     @Override
     protected void onStart() {
@@ -63,14 +110,7 @@ public class MovieListerActivity extends AppCompatActivity {
                 finish();
             }
         });
-        category = getIntent().getStringExtra("_title_");
-        title.setText(category);
-        progressDialog = ProgressDialog.show(MovieListerActivity.this,"", "Loading. Please wait...", true);
-        if(getIntent().getIntExtra("callSc", 0) == 0){
-            getAllDataByCategory(category);
-        }else{
-            getAllDataByIndustry(category);
-        }
+
     }
 
     private Retrofit initializeRetrofit(String url){
@@ -79,7 +119,7 @@ public class MovieListerActivity extends AppCompatActivity {
 
     private void getAllDataByIndustry(String toolbarTitle) {
         UserRoutes user = initializeRetrofit(Config.getBaseUrl()).create(UserRoutes.class);
-        Call<List<CinemaPOJO>> call = user.getMoviesByIndustry(toolbarTitle ,getSharedPreferences("MY_PREFS", MODE_PRIVATE).getString("USER_TOKEN", null));
+        Call<List<CinemaPOJO>> call = user.getMoviesByIndustry(toolbarTitle, 100,getSharedPreferences("MY_PREFS", MODE_PRIVATE).getString("USER_TOKEN", null));
         call.enqueue(new Callback<List<CinemaPOJO>>() {
             @Override
             public void onResponse(Call<List<CinemaPOJO>> call, Response<List<CinemaPOJO>> response) {
@@ -103,7 +143,7 @@ public class MovieListerActivity extends AppCompatActivity {
 
     private void getAllDataByCategory(String category){
         UserRoutes user = initializeRetrofit(Config.getBaseUrl()).create(UserRoutes.class);
-        Call<List<CinemaPOJO>> call = user.getMoviesByCategory(category ,getSharedPreferences("MY_PREFS", MODE_PRIVATE).getString("USER_TOKEN", null));
+        Call<List<CinemaPOJO>> call = user.getMoviesByCategory(category, 100 ,getSharedPreferences("MY_PREFS", MODE_PRIVATE).getString("USER_TOKEN", null));
         call.enqueue(new Callback<List<CinemaPOJO>>() {
             @Override
             public void onResponse(Call<List<CinemaPOJO>> call, Response<List<CinemaPOJO>> response) {
