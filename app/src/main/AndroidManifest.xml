@@ -4,7 +4,6 @@
     package="com.example.bioscope">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
@@ -15,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".MovieListerActivity"></activity>
+        <activity android:name=".MovieListerActivity"/>
         <activity android:name=".SettingActivity" />
         <activity android:name=".OTPCheckerActivity" />
         <activity android:name=".AboutActivity" />

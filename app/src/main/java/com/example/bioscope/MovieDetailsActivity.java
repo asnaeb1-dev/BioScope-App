@@ -5,14 +5,18 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -42,6 +46,7 @@ import com.example.bioscope.Utility.LastPlayed;
 import com.google.android.material.snackbar.Snackbar;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import java.security.Permission;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -359,6 +364,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
     }
 
     public void downloadMedia(View view) {
+        getPermissions();
+    }
+
+    private void download(){
         if(cinemaPOJO.getUrl()!=null){
             DownloadManager downloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
             Uri uri = Uri.parse(cinemaPOJO.getUrl());
@@ -371,5 +380,26 @@ public class MovieDetailsActivity extends AppCompatActivity {
         }else{
             Snackbar.make(constraintLayout, "Sorry! Download link unavailable.", Snackbar.LENGTH_SHORT).show();
         }
+    }
+
+    private void getPermissions(){
+        if (ContextCompat.checkSelfPermission(MovieDetailsActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(MovieDetailsActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 222);
+        }else{
+            download();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 222) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                download();
+            }
+            else {
+                Toast.makeText(MovieDetailsActivity.this, "Storage Permission Denied", Toast.LENGTH_SHORT).show();
+            }
+        }
+
     }
 }
